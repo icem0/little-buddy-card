@@ -1,0 +1,81 @@
+# Little Buddy Card — Service Script: XP Gain (Level Up + Tree Stage)
+# File: scripts/little_buddy_gain_xp.yaml
+# Add to scripts.yaml in Home Assistant
+
+little_buddy_gain_xp:
+  alias: "Little Buddy: Gain XP"
+  description: "Adds XP to buddy. Auto-calculates level-up and tree stage progression."
+  fields:
+    amount:
+      description: "XP amount to grant (e.g. 100 from a learning app event)"
+      example: "100"
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 5000
+          step: 1
+          unit_of_measurement: "XP"
+  variables:
+    current_xp: "{{ states('input_number.little_buddy_xp_total') | int(0) }}"
+    current_level: "{{ states('input_number.little_buddy_level') | int(1) }}"
+    new_xp: "{{ current_xp + (amount | int) }}"
+  sequence:
+    - alias: "Set new XP"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.little_buddy_xp_total
+      data:
+        value: "{{ new_xp }}"
+
+    - alias: "Calculate and apply level if XP threshold met"
+      choose:
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ new_xp >= ((current_level + 1) * 1000) and current_level < 50 }}
+          sequence:
+            - service: input_number.set_value
+              target:
+                entity_id: input_number.little_buddy_level
+              data:
+                value: "{{ current_level + 1 }}"
+
+    - alias: "Tree stage progression: every 5 levels"
+      choose:
+        - conditions:
+            - condition: template
+              value_template: >
+                {% set lvl = states('input_number.little_buddy_level') | int %}
+                {{ (lvl % 5 == 0) and lvl >= 5 and lvl <= 50 }}
+          sequence:
+            - service: input_select.select_option
+              target:
+                entity_id: input_select.little_buddy_tree_stage
+              data:
+                option: >
+                  {% set lvl = states('input_number.little_buddy_level') | int %}
+                  {% set idx = ((lvl / 5) | int(0)) - 1 %}
+                  {{ ['seed', 'sprout', 'sapling', 'young_tree', 'full_grown'][idx] if idx < 5 else 'full_grown' }}
+
+    - alias: "Bump happiness slightly on XP gain"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.little_buddy_happiness
+      data:
+        value: >
+          {{ [states('input_number.little_buddy_happiness') | int(0) + 2, 100] | min }}
+
+    - alias: "Notification on level-up"
+      choose:
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ states('input_number.little_buddy_level') | int > current_level }}
+          sequence:
+            - service: persistent_notification.create
+              data:
+                title: "🎉 Little Buddy Level Up!"
+                message: >
+                  Your Little Buddy reached Level {{ states('input_number.little_buddy_level') | int }}!
+                  Total XP: {{ new_xp }} / Next: {{ (states('input_number.little_buddy_level') | int + 1) * 1000 }}

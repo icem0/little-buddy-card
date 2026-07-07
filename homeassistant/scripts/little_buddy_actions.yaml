@@ -1,0 +1,95 @@
+# Little Buddy Card — Action Scripts (Feed, Play, Sleep, Water)
+# File: scripts/little_buddy_actions.yaml
+
+little_buddy_feed:
+  alias: "Little Buddy: Feed"
+  description: "Reduces hunger, restores some health, costs energy"
+  sequence:
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_hunger }
+      data:
+        value: "{{ [states('input_number.little_buddy_hunger') | int(0) - 35, 0] | max }}"
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_health }
+      data:
+        value: "{{ [states('input_number.little_buddy_health') | int(0) + 8, 100] | min }}"
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_energy }
+      data:
+        value: "{{ [states('input_number.little_buddy_energy') | int(0) - 5, 0] | max }}"
+    - service: input_select.select_option
+      target: { entity_id: input_select.little_buddy_mood }
+      data: { option: "happy" }
+
+little_buddy_play:
+  alias: "Little Buddy: Play"
+  description: "Boosts happiness, drains energy, gains XP"
+  sequence:
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_happiness }
+      data:
+        value: "{{ [states('input_number.little_buddy_happiness') | int(0) + 25, 100] | min }}"
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_energy }
+      data:
+        value: "{{ [states('input_number.little_buddy_energy') | int(0) - 20, 0] | max }}"
+    - service: input_select.select_option
+      target: { entity_id: input_select.little_buddy_mood }
+      data: { option: "playful" }
+    - service: script.little_buddy_gain_xp
+      data: { amount: 50 }
+
+little_buddy_sleep:
+  alias: "Little Buddy: Sleep"
+  description: "Restore energy, slowly heal"
+  sequence:
+    - service: input_boolean.turn_off
+      target: { entity_id: input_boolean.little_buddy_is_awake }
+    - service: input_select.select_option
+      target: { entity_id: input_select.little_buddy_mood }
+      data: { option: "sleepy" }
+    - delay: "00:30:00"  # sleep for 30 in-game minutes
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_energy }
+      data:
+        value: 100
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_health }
+      data:
+        value: "{{ [states('input_number.little_buddy_health') | int(0) + 15, 100] | min }}"
+    - service: input_boolean.turn_on
+      target: { entity_id: input_boolean.little_buddy_is_awake }
+    - service: input_select.select_option
+      target: { entity_id: input_select.little_buddy_mood }
+      data: { option: "happy" }
+
+little_buddy_water:
+  alias: "Little Buddy: Water"
+  description: "Quenches thirst, small happiness boost"
+  sequence:
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_hunger }
+      data:
+        value: "{{ [states('input_number.little_buddy_hunger') | int(0) - 8, 0] | max }}"
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_happiness }
+      data:
+        value: "{{ [states('input_number.little_buddy_happiness') | int(0) + 5, 100] | min }}"
+    - service: input_select.select_option
+      target: { entity_id: input_select.little_buddy_mood }
+      data: { option: "happy" }
+
+little_buddy_pet:
+  alias: "Little Buddy: Pet"
+  description: "Quick affection boost, no resource cost"
+  sequence:
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_happiness }
+      data:
+        value: "{{ [states('input_number.little_buddy_happiness') | int(0) + 10, 100] | min }}"
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_energy }
+      data:
+        value: "{{ [states('input_number.little_buddy_energy') | int(0) - 2, 0] | max }}"
+    - service: script.little_buddy_gain_xp
+      data: { amount: 10 }

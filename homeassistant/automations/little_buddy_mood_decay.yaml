@@ -1,0 +1,168 @@
+# Little Buddy Card — Automations
+# File: automations/little_buddy_mood_decay.yaml
+
+# 1) MOOD DECAY (every 30 min: hunger up, energy down, mood reactive)
+- id: little_buddy_mood_decay
+  alias: "Little Buddy: Mood Decay"
+  mode: single
+  trigger:
+    - platform: time_pattern
+      minutes: "/30"
+  condition:
+    - condition: state
+      entity_id: input_boolean.little_buddy_is_awake
+      state: "on"
+  action:
+    # Hunger increases
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_hunger }
+      data:
+        value: "{{ [states('input_number.little_buddy_hunger') | int(0) + 3, 100] | min }}"
+    # Energy decreases
+    - service: input_number.set_value
+      target: { entity_id: input_number.little_buddy_energy }
+      data:
+        value: "{{ [states('input_number.little_buddy_energy') | int(0) - 5, 0] | max }}"
+    # Mood auto-resolve from stats
+    - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_hunger
+              above: 70
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_mood }
+              data: { option: "hungry" }
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_energy
+              below: 25
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_mood }
+              data: { option: "sleepy" }
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_happiness
+              below: 30
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_mood }
+              data: { option: "sad" }
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ states('input_number.little_buddy_hunger') | int(0) < 40 and
+                   states('input_number.little_buddy_energy') | int(0) > 60 and
+                   states('input_number.little_buddy_happiness') | int(0) > 60 }}
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_mood }
+              data: { option: "happy" }
+
+# 2) CRITICAL HEALTH → SAD MOOD
+- id: little_buddy_health_alert
+  alias: "Little Buddy: Critical Health Alert"
+  mode: single
+  trigger:
+    - platform: numeric_state
+      entity_id: input_number.little_buddy_health
+      below: 20
+  action:
+    - service: input_select.select_option
+      target: { entity_id: input_select.little_buddy_mood }
+      data: { option: "sad" }
+    - service: persistent_notification.create
+      data:
+        title: "⚠️ Little Buddy braucht Hilfe!"
+        message: >
+          Dein Little Buddy ist sehr schwach (Health: {{ states('input_number.little_buddy_health') | int }}%).
+          Füttere oder spiele mit ihm!
+
+# 3) TREE STAGE TRANSITION
+- id: little_buddy_tree_growth
+  alias: "Little Buddy: Tree Stage Check"
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: input_number.little_buddy_level
+  action:
+    - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_level
+              below: 5
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_tree_stage }
+              data: { option: "seed" }
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_level
+              above: 4
+              below: 10
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_tree_stage }
+              data: { option: "sprout" }
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_level
+              above: 9
+              below: 15
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_tree_stage }
+              data: { option: "sapling" }
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_level
+              above: 14
+              below: 25
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_tree_stage }
+              data: { option: "young_tree" }
+        - conditions:
+            - condition: numeric_state
+              entity_id: input_number.little_buddy_level
+              above: 24
+          sequence:
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_tree_stage }
+              data: { option: "full_grown" }
+
+# 4) DEEP SLEEP AT NIGHT (auto-sleep 23:00, auto-wake 07:00)
+- id: little_buddy_sleep_cycle
+  alias: "Little Buddy: Nightly Sleep Cycle"
+  mode: single
+  trigger:
+    - platform: time
+      at: "23:00:00"
+      id: "sleep"
+    - platform: time
+      at: "07:00:00"
+      id: "wake"
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: "sleep"
+          sequence:
+            - service: input_boolean.turn_off
+              target: { entity_id: input_boolean.little_buddy_is_awake }
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_mood }
+              data: { option: "sleepy" }
+        - conditions:
+            - condition: trigger
+              id: "wake"
+          sequence:
+            - service: input_number.set_value
+              target: { entity_id: input_number.little_buddy_energy }
+              data: { value: 100 }
+            - service: input_boolean.turn_on
+              target: { entity_id: input_boolean.little_buddy_is_awake }
+            - service: input_select.select_option
+              target: { entity_id: input_select.little_buddy_mood }
+              data: { option: "happy" }

@@ -1,0 +1,65 @@
+# Little Buddy Card — Template Sensors
+# Copy into configuration.yaml under `template:` or as a separate file included via !include
+
+template:
+  - trigger:
+      # Recalculate whenever any input changes
+      - platform: state
+        entity_id:
+          - input_select.little_buddy_mood
+          - input_number.little_buddy_xp_total
+          - input_number.little_buddy_level
+          - input_number.little_buddy_health
+          - input_number.little_buddy_hunger
+          - input_number.little_buddy_energy
+          - input_number.little_buddy_happiness
+          - input_select.little_buddy_tree_stage
+          - input_boolean.little_buddy_is_awake
+    sensor:
+      ## XP to next level (how many more XP until the buddy levels up)
+      - name: "Little Buddy XP to Next Level"
+        state: >
+          {% set lvl = states('input_number.little_buddy_level') | int %}
+          {% set xp_total = states('input_number.little_buddy_xp_total') | int %}
+          {% set xp_needed = (lvl + 1) * 1000 - xp_total %}
+          {{ max(0, xp_needed) }}
+        state_class: measurement
+        unit_of_measurement: "XP"
+        icon: "mdi:star-cog"
+
+      ## XP percentage within current level band
+      - name: "Little Buddy Level Progress"
+        state: >
+          {% set lvl = states('input_number.little_buddy_level') | int %}
+          {% set xp_total = states('input_number.little_buddy_xp_total') | int %}
+          {% set xp_this_level = xp_total - (lvl * 1000) + 1000 %}
+          {{ ((xp_this_level / 1000.0) * 100) | round(1) }}
+        state_class: measurement
+        unit_of_measurement: "%"
+        icon: "mdi:trend-up"
+
+      ## Overall stats score (0-100, average of health/energy/happiness inverted hunger)
+      - name: "Little Buddy Overall Stats"
+        state: >
+          {% set h = states('input_number.little_buddy_health') | float %}
+          {% set e = states('input_number.little_buddy_energy') | float %}
+          {% set hp = states('input_number.little_buddy_happiness') | float %}
+          {% set hg = states('input_number.little_buddy_hunger') | float %}
+          {% set hunger_penalty = 100 - hg %}
+          {{ (((h + e + hp + hunger_penalty) / 4.0)) | round(1) }}
+        state_class: measurement
+        unit_of_measurement: "%"
+        icon: "mdi:gauge"
+
+      ## Mood display text in active language (fallback en)
+      - name: "Little Buddy Mood Display"
+        state: >
+          {% set mood = states('input_select.little_buddy_mood') %}
+          {% set lang = config.get('language', 'en') | lower %}
+          {{ {
+            'en': {'happy':'😊 Happy','sad':'😢 Sad','hungry':'🍎 Hungry','thirsty':'💧 Thirsty','sleepy':'😴 Sleepy','angry':'😠 Angry','playful':'🎾 Playful'},
+            'de': {'happy':'😊 Glücklich','sad':'😢 Traurig','hungry':'🍎 Hungrig','thirsty':'💧 Durstig','sleepy':'😴 Müde','angry':'😠 Wütend','playful':'🎾 Verspielt'}
+          }.get(lang, {}).get(mood, '😊 Happy') }}
+        icon: >
+          {% set mood = states('input_select.little_buddy_mood') %}
+          {'happy':'mdi:emoticon-happy','sad':'mdi:emoticon-sad','hungry':'mdi:food-apple-outline','thirsty':'mdi:water','sleepy':'mdi:sleep','angry':'mdi:emoticon-angry','playful':'mdi:table-tennis'}.get(mood, 'mdi:help-circle')

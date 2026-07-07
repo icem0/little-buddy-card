@@ -1,0 +1,89 @@
+# Little Buddy Card — Input Entities (HA Helpers)
+# Settings → Devices & Services → Helpers → erstellen
+# Oder direkt in configuration.yaml kopieren
+
+input_select:
+  little_buddy_mood:
+    name: "Little Buddy Mood"
+    options:
+      - happy
+      - sad
+      - hungry
+      - thirsty
+      - sleepy
+      - angry
+      - playful
+    initial: happy
+    icon: "mdi:emoticon-happy-outline"
+
+  little_buddy_tree_stage:
+    name: "Little Buddy Tree Stage"
+    options:
+      - seed
+      - sprout
+      - sapling
+      - young_tree
+      - full_grown
+    initial: seed
+    icon: "mdi:seed"
+
+input_number:
+  little_buddy_xp_total:
+    name: "Little Buddy Total XP"
+    min: 0
+    max: 50000
+    step: 1
+    initial: 0
+    mode: box
+    icon: "mdi:star-four-points"
+
+  little_buddy_level:
+    name: "Little Buddy Level"
+    min: 1
+    max: 50
+    step: 1
+    initial: 1
+    mode: slider
+    icon: "mdi:sword"
+
+  little_buddy_health:
+    name: "Little Buddy Health"
+    min: 0
+    max: 100
+    step: 1
+    initial: 80
+    mode: slider
+    icon: "mdi:heart-pulse"
+
+  little_buddy_hunger:
+    name: "Little Buddy Hunger"
+    min: 0
+    max: 100
+    step: 1
+    initial: 30
+    mode: slider
+    icon: "mdi:food-apple-outline"
+
+  little_buddy_energy:
+    name: "Little Buddy Energy"
+    min: 0
+    max: 100
+    step: 1
+    initial: 90
+    mode: slider
+    icon: "mdi:lightning-bolt-outline"
+
+  little_buddy_happiness:
+    name: "Little Buddy Happiness"
+    min: 0
+    max: 100
+    step: 1
+    initial: 75
+    mode: slider
+    icon: "mdi:emoticon-excited-outline"
+
+input_boolean:
+  little_buddy_is_awake:
+    name: "Little Buddy Awake"
+    initial: true
+    icon: "mdi:sleep"
