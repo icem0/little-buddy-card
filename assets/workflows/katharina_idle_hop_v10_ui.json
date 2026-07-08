@@ -1,0 +1,508 @@
+{
+  "id": "katharina_v10",
+  "revision": 0,
+  "last_node_id": 0,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        200,
+        200
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        550,
+        200
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "wan"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        900,
+        200
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "wan_2.1_vae.safetensors"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "CLIPVisionLoader",
+      "pos": [
+        1250,
+        200
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "clip_vision_h.safetensors"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "LoadImage",
+      "pos": [
+        200,
+        480
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "katharina_master.png"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "CLIPVisionEncode",
+      "pos": [
+        550,
+        480
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip_vision",
+          "type": "CLIP_VISION",
+          "link": 72
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 72
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        null
+      ]
+    },
+    {
+      "id": 7,
+      "type": "ModelSamplingSD3",
+      "pos": [
+        900,
+        480
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 85
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        8
+      ]
+    },
+    {
+      "id": 8,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1250,
+        480
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 98
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "cute chibi kawaii girl with blonde braids in red dress, hopping happily, pixel art style"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "CLIPTextEncode",
+      "pos": [
+        200,
+        760
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 111
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "blurry, ugly, deformed"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "WanAnimateToVideo",
+      "pos": [
+        550,
+        760
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 124
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 124
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 124
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        832,
+        480,
+        49,
+        1,
+        5,
+        0
+      ]
+    },
+    {
+      "id": 11,
+      "type": "KSampler",
+      "pos": [
+        900,
+        760
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 137
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 137
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 137
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 137
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        5.5,
+        "uni_pc",
+        "simple",
+        1.0
+      ]
+    },
+    {
+      "id": 12,
+      "type": "VAEDecode",
+      "pos": [
+        1250,
+        760
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 150
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 150
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": []
+    },
+    {
+      "id": 13,
+      "type": "SaveImage",
+      "pos": [
+        200,
+        1040
+      ],
+      "size": {
+        "0": 450,
+        "1": 380
+      },
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 163
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "V10_Katharina"
+      ]
+    }
+  ],
+  "links": [
+    [
+      72,
+      4,
+      0,
+      6,
+      0,
+      "CLIP_VISION"
+    ],
+    [
+      72,
+      5,
+      0,
+      6,
+      1,
+      "IMAGE"
+    ],
+    [
+      85,
+      1,
+      0,
+      7,
+      0,
+      "MODEL"
+    ],
+    [
+      98,
+      2,
+      0,
+      8,
+      0,
+      "CLIP"
+    ],
+    [
+      111,
+      2,
+      0,
+      9,
+      0,
+      "CLIP"
+    ],
+    [
+      124,
+      8,
+      0,
+      10,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      124,
+      9,
+      0,
+      10,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      124,
+      3,
+      0,
+      10,
+      2,
+      "VAE"
+    ],
+    [
+      137,
+      7,
+      0,
+      11,
+      0,
+      "MODEL"
+    ],
+    [
+      137,
+      10,
+      0,
+      11,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      137,
+      10,
+      1,
+      11,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      137,
+      10,
+      2,
+      11,
+      3,
+      "LATENT"
+    ],
+    [
+      150,
+      11,
+      0,
+      12,
+      0,
+      "LATENT"
+    ],
+    [
+      150,
+      3,
+      0,
+      12,
+      1,
+      "VAE"
+    ],
+    [
+      163,
+      12,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "version": 0.4
+}
