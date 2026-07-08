@@ -38,3 +38,66 @@ const STRINGS = {
     mood_happy: 'Glücklich',
     mood_sad: 'Traurig',
     mood_hungry: 'Hungrig',
+    mood_thirsty: 'Durstig',
+    mood_sleepy: 'Müde',
+    mood_angry: 'Wütend',
+    mood_playful: 'Verspielt',
+    level: 'Level',
+    xp: 'XP',
+    health: 'Gesundheit',
+    hunger: 'Hunger',
+    energy: 'Energie',
+    happiness: 'Glücklichkeit',
+    tree_level: 'Baum',
+  },
+};
+
+@customElement('little-buddy-card')
+export class LittleBuddyCard extends LitElement {
+  @state() private _config?: any;
+  @state() private _hass?: any;
+
+  static get properties() {
+    return {
+      _config: {},
+      _hass: {},
+    };
+  }
+
+  setConfig(config) {
+    if (!config) {
+      throw new Error('Invalid configuration');
+    }
+    this._config = config;
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+  }
+
+  render() {
+    if (!this._hass || !this._config) {
+      return html``;
+    }
+
+    const language = getLocale(this._hass);
+    const strings = STRINGS[language as keyof typeof STRINGS] || STRINGS.en;
+
+    return html`
+      <div class="card">
+        <h2>${strings.level}</h2>
+        <p>Little Buddy Card</p>
+      </div>
+    `;
+  }
+
+  static get styles() {
+    return css`
+      .card {
+        padding: 16px;
+        background-color: var(--card-background-color, var(--background-color));
+        border-radius: var(--border-radius, 8px);
+      }
+    `;
+  }
+}
