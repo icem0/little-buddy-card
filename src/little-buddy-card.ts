@@ -22,7 +22,7 @@ const STRINGS = {
     mood_happy: 'Happy',
     mood_sad: 'Sad',
     mood_hungry: 'Hungry',
-    mood_thirsty: 'Thirsty',
+    moisture_thirsty: 'Thirsty',
     mood_sleepy: 'Sleepy',
     mood_angry: 'Angry',
     mood_playful: 'Playful',
@@ -33,13 +33,14 @@ const STRINGS = {
     energy: 'Energy',
     happiness: 'Happiness',
     tree_level: 'Tree',
-    xp_to_next: 'XP to next',
+    xp_to_next: 'XP to next level',
+    click_to_gain: 'Click to gain XP',
   },
   de: {
     mood_happy: 'Glücklich',
     mood_sad: 'Traurig',
     mood_hungry: 'Hungrig',
-    mood_thirsty: 'Durstig',
+    moisture_thirsty: 'Durstig',
     mood_sleepy: 'Müde',
     mood_angry: 'Wütend',
     mood_playful: 'Verspielt',
@@ -50,7 +51,8 @@ const STRINGS = {
     energy: 'Energie',
     happiness: 'Glücklichkeit',
     tree_level: 'Baum',
-    xp_to_next: 'XP bis zum nächsten',
+    xp_to_next: 'XP bis zum nächsten Level',
+    click_to_gain: 'Klicke um XP zu erhalten',
   },
 };
 
@@ -95,6 +97,16 @@ export class LittleBuddyCard extends LitElement {
     return val !== undefined && val !== null ? String(val) : '';
   }
 
+  // Get XP per click from config entity or default 10
+  private getXpPerClick(): number {
+    const xpPerEntity = this._config?.xp_per_click;
+    if (xpPerEntity) {
+      const val = this.getStateNum(xpPerEntity);
+      if (!isNaN(val) && val > 0) return Math.floor(val);
+    }
+    return 10;
+  }
+
   private getPetImageUrl(): string {
     // If gif_url entity provided, use its state
     const gifEntity = this._config?.gif_url;
@@ -119,6 +131,24 @@ export class LittleBuddyCard extends LitElement {
     return `/local/little-buddy-card/trees/${treeLevel}.gif`;
   }
 
+  private async _handlePetClick() {
+    if (!this._hass || !this._config?.xp) {
+      return;
+    }
+    const xpEntity = this._config.xp;
+    const currentXp = this.getStateNum(xpEntity);
+    const xpToAdd = this.getXpPerClick();
+    const newXp = currentXp + xpToAdd;
+    try {
+      await this._hass.callService('input_number', 'set_value', {
+        entity_id: xpEntity,
+        value: newXp,
+      });
+    } catch (e) {
+      console.error('Failed to set XP:', e);
+    }
+  }
+
   render() {
     if (!this._hass || !this._config) {
       return html``;
@@ -131,29 +161,24 @@ export class LittleBuddyCard extends LitElement {
     const moodStr = strings[`mood_${mood}` as keyof typeof strings] || mood;
 
     const xpNum = this.getStateNum(this._config?.xp) || 0;
-    const currentLevelBase = Math.floor(xpNum / 1000) * 1000;
-    const level = Math.floor(xpNum / 1000) + 1;
-    const levelClamped = Math.min(level, 5);
-    const xpForLevel = levelClamped * 1000;
-    const xpNext = (levelClamped + 1) * 1000;
-    const xpInLevel = xpNum - currentLevelBase;
-    const xpNeeded = 1000;
-    const progress = xpInLevel / xpNeeded; // 0 to 1
-
+    const calculatedLevel = Math.floor(xpNum / 1000) + 1;
+    const level = Math.min(calculatedLevel, 5);
     const healthNum = this.getStateNum(this._config?.health) || 0;
     const hungerNum = this.getStateNum(this._config?.hunger) || 0;
     const energyNum = this.getStateNum(this._config?.energy) || 0;
     const happinessNum = this.getStateNum(this._config?.happiness) || 0;
 
     return html`
-      <div class="card">
+      <div class="card" @click=${this._handlePetClick}>
         <div class="header">
-          <div class="title">${strings.level}: ${levelClamped}</div>
+          <div class="title">${strings.level}: ${level}</div>
           <div class="xp">XP: ${xpNum}</div>
         </div>
         <div class="content">
-          <img class="pet" src="${this.getPetImageUrl()}" alt="Little Buddy" />
-          <img class="tree" src="${this.getTreeImageUrl()}" alt="Buddy Tree" />
+          <div class="pet-wrapper">
+            <img class="pet" src="${this.getPetImageUrl()}" alt="Little Buddy" @error=${this._onImgError} />
+          </div>
+          <img class="tree" src="${this.getTreeImageUrl()}" alt="Buddy Tree" @error=${this._onImgError} />
         </div>
         <div class="stats">
           <div class="stat">
@@ -171,14 +196,22 @@ export class LittleBuddyCard extends LitElement {
         </div>
         <div class="xp-bar">
           <div class="xp-bar-bg"></div>
-          <div class="xp-bar-fill" style="width: ${progress * 100}%"></div>
-          <div class="xp-text">${xpInLevel}/${xpNeeded} ${strings.xp_to_next}</div>
+          <div class="xp-bar-fill" style="width: ${(xpNum % 1000) / 10}%"></div>
+          <div class="xp-text">${xpNum % 1000} / 1000 ${strings.xp_to_next}</div>
         </div>
         <div class="mood">
           <span class="label">${strings.mood_happy}:</span> <span class="value">${moodStr}</span>
+          <span class="hint">${strings.click_to_gain}</span>
         </div>
       </div>
     `;
+  }
+
+  private _onImgError(ev: Event) {
+    const img = ev.target as HTMLImageElement;
+    // Replace with a placeholder image (maybe a generic pixel art question mark
+    img.src = '/local/little-buddy-card/pets/unknown.gif';
+    img.alt = 'Image not found';
   }
 
   static get styles() {
@@ -191,6 +224,11 @@ export class LittleBuddyCard extends LitElement {
         flex-direction: column;
         align-items: center;
         gap: 12px;
+        cursor: pointer;
+        transition: box-shadow 0.2s ease;
+      }
+      .card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       }
       .header {
         display: flex;
@@ -203,7 +241,20 @@ export class LittleBuddyCard extends LitElement {
         gap: 24px;
         align-items: flex-end;
       }
-      .pet, .tree {
+      .pet-wrapper {
+        width: 128px;
+        height: 128px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .pet {
+        height: 128px;
+        width: auto;
+        image-rendering: pixelated;
+        pointer-events: none;
+      }
+      .tree {
         height: 128px;
         width: auto;
         image-rendering: pixelated;
@@ -254,6 +305,13 @@ export class LittleBuddyCard extends LitElement {
       .mood {
         margin-top: 8px;
         font-size: 0.9em;
+        text-align: center;
+        width: 100%;
+      }
+      .hint {
+        font-size: 0.75em;
+        opacity: 0.7;
+        margin-top: 4px;
       }
     `;
   }
