@@ -33,6 +33,7 @@ const STRINGS = {
     energy: 'Energy',
     happiness: 'Happiness',
     tree_level: 'Tree',
+    xp_to_next: 'XP to next',
   },
   de: {
     mood_happy: 'Glücklich',
@@ -49,6 +50,7 @@ const STRINGS = {
     energy: 'Energie',
     happiness: 'Glücklichkeit',
     tree_level: 'Baum',
+    xp_to_next: 'XP bis zum nächsten',
   },
 };
 
@@ -128,8 +130,16 @@ export class LittleBuddyCard extends LitElement {
     const mood = this.getStateStr(this._config?.mood) || 'happy';
     const moodStr = strings[`mood_${mood}` as keyof typeof strings] || mood;
 
-    const levelNum = this.getStateNum(this._config?.level) || 1;
     const xpNum = this.getStateNum(this._config?.xp) || 0;
+    const currentLevelBase = Math.floor(xpNum / 1000) * 1000;
+    const level = Math.floor(xpNum / 1000) + 1;
+    const levelClamped = Math.min(level, 5);
+    const xpForLevel = levelClamped * 1000;
+    const xpNext = (levelClamped + 1) * 1000;
+    const xpInLevel = xpNum - currentLevelBase;
+    const xpNeeded = 1000;
+    const progress = xpInLevel / xpNeeded; // 0 to 1
+
     const healthNum = this.getStateNum(this._config?.health) || 0;
     const hungerNum = this.getStateNum(this._config?.hunger) || 0;
     const energyNum = this.getStateNum(this._config?.energy) || 0;
@@ -138,7 +148,7 @@ export class LittleBuddyCard extends LitElement {
     return html`
       <div class="card">
         <div class="header">
-          <div class="title">${strings.level}: ${levelNum}</div>
+          <div class="title">${strings.level}: ${levelClamped}</div>
           <div class="xp">XP: ${xpNum}</div>
         </div>
         <div class="content">
@@ -159,6 +169,11 @@ export class LittleBuddyCard extends LitElement {
             <span class="label">${strings.happiness}:</span> <span class="value">${happinessNum}</span>
           </div>
         </div>
+        <div class="xp-bar">
+          <div class="xp-bar-bg"></div>
+          <div class="xp-bar-fill" style="width: ${progress * 100}%"></div>
+          <div class="xp-text">${xpInLevel}/${xpNeeded} ${strings.xp_to_next}</div>
+        </div>
         <div class="mood">
           <span class="label">${strings.mood_happy}:</span> <span class="value">${moodStr}</span>
         </div>
@@ -172,8 +187,6 @@ export class LittleBuddyCard extends LitElement {
         padding: 16px;
         background-color: var(--card-background-color, var(--background-color));
         border-radius: var(--border-radius, 8px);
-        font-family: var(--font-family);
-        color: var(--primary-text-color, var(--text-color));
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -197,23 +210,50 @@ export class LittleBuddyCard extends LitElement {
       }
       .stats {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        gap: 6px;
         width: 100%;
-        text-align: left;
         font-size: 0.9em;
       }
       .stat {
         display: flex;
         justify-content: space-between;
       }
-      .mood {
-        font-size: 0.9em;
-        width: 100%;
-        text-align: left;
-      }
       .label {
         font-weight: 500;
+      }
+      .xp-bar {
+        width: 100%;
+        background: var(--divider-color, var(--grey-light-2));
+        border-radius: 4px;
+        overflow: hidden;
+        height: 8px;
+        position: relative;
+      }
+      .xp-bar-bg {
+        width: 100%;
+        height: 100%;
+        background: var(--divider-color, var(--grey-light-2));
+      }
+      .xp-bar-fill {
+        height: 100%;
+        background: var(--paper-item-selected-color, var(--accent-color));
+        width: 0%;
+        transition: width 0.2s ease;
+      }
+      .xp-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        line-height: 8px;
+        font-size: 0.75em;
+        color: var(--primary-text-color, var(--text-color));
+        pointer-events: none;
+      }
+      .mood {
+        margin-top: 8px;
+        font-size: 0.9em;
       }
     `;
   }
