@@ -22,7 +22,7 @@ const STRINGS = {
     mood_happy: 'Happy',
     mood_sad: 'Sad',
     mood_hungry: 'Hungry',
-    moisture_thirsty: 'Thirsty',
+    mood_thirsty: 'Thirsty',
     mood_sleepy: 'Sleepy',
     mood_angry: 'Angry',
     mood_playful: 'Playful',
@@ -40,7 +40,7 @@ const STRINGS = {
     mood_happy: 'Glücklich',
     mood_sad: 'Traurig',
     mood_hungry: 'Hungrig',
-    moisture_thirsty: 'Durstig',
+    mood_thirsty: 'Durstig',
     mood_sleepy: 'Müde',
     mood_angry: 'Wütend',
     mood_playful: 'Verspielt',
@@ -209,8 +209,8 @@ export class LittleBuddyCard extends LitElement {
 
   private _onImgError(ev: Event) {
     const img = ev.target as HTMLImageElement;
-    // Replace with a placeholder image (maybe a generic pixel art question mark
-    img.src = '/local/little-buddy-card/pets/unknown.gif';
+    // Use a transparent 1x1 pixel gif as fallback to avoid broken image icons
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     img.alt = 'Image not found';
   }
 
