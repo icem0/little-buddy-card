@@ -8,5 +8,5 @@
   ],
   "documentation": "https://github.com/icem0/little-buddy-card",
   "dependencies": [],
-  "integration_type": "dashboard"
+  "integration_type": "lovelace"
 }
