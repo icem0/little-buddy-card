@@ -6,6 +6,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
+    "release": "bash scripts/release.sh",
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
