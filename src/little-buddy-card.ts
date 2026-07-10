@@ -2,8 +2,9 @@
  * Little Buddy Card — Gamified Lovelace Card for Home Assistant
  * A pixel-art pet/tree companion that grows based on XP and level.
  */
-import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { LitElement, html, css, nothing, type TemplateResult } from 'lit';
+import { customElement, state, property } from 'lit/decorators.js';
+import type { HomeAssistant, LovelaceCardEditor, LovelaceCardConfig } from 'custom-card-helpers';
 
 /**
  * Detect active language from HA locale or fallback to browser default.
@@ -56,26 +57,88 @@ const STRINGS = {
   },
 };
 
+export interface LittleBuddyCardConfig extends LovelaceCardConfig {
+  title?: string;
+  name?: string;
+  mood?: string;
+  xp?: string;
+  level?: string;
+  health?: string;
+  hunger?: string;
+  energy?: string;
+  happiness?: string;
+  tree_level?: string;
+  gif_url?: string;
+  tree_gif_url?: string;
+  xp_per_click?: string;
+  moods?: MoodTrigger[];
+}
+
+export interface MoodTrigger {
+  mood: string;
+  entity: string;
+  state: string;
+}
+
+/**
+ * Register the card with Home Assistant's card picker ("+ Add Card").
+ * Without this entry the card only works via manual YAML — it never shows
+ * up in the visual editor.
+ */
+(window as any).customCards = (window as any).customCards || [];
+(window as any).customCards.push({
+  type: 'little-buddy-card',
+  name: 'Little Buddy Card',
+  description: 'A gamified Lovelace card with growable pixel-art pets and trees.',
+});
+
 @customElement('little-buddy-card')
 export class LittleBuddyCard extends LitElement {
-  @state() private _config?: any;
-  @state() private _hass?: any;
+  @state() private _config?: LittleBuddyCardConfig;
+  @state() private _hass?: HomeAssistant;
 
   static get properties() {
     return {
-      _config: {},
-      _hass: {},
+      _config: { state: true },
+      _hass: { state: true },
     };
   }
 
-  setConfig(config) {
+  /**
+   * Returns the visual configuration editor element.
+   * This is what makes the card editable through the dashboard UI.
+   */
+  public static async getConfigElement(): Promise<LovelaceCardEditor> {
+    return document.createElement('little-buddy-card-editor') as LovelaceCardEditor;
+  }
+
+  /**
+   * Default config used when the card is dropped on a dashboard from the
+   * card picker. Uses sensible entity ids that match the README helpers.
+   */
+  public static getStubConfig(): Record<string, unknown> {
+    return {
+      name: 'Little Buddy',
+      mood: 'input_select.little_buddy_mood',
+      xp: 'input_number.little_buddy_xp',
+      level: 'input_number.little_buddy_level',
+      health: 'input_number.little_buddy_health',
+      hunger: 'input_number.little_buddy_hunger',
+      energy: 'input_number.little_buddy_energy',
+      happiness: 'input_number.little_buddy_happiness',
+      tree_level: 'input_select.little_buddy_tree_level',
+      xp_per_click: 'input_number.little_buddy_xp_per_click',
+    };
+  }
+
+  setConfig(config: LittleBuddyCardConfig) {
     if (!config) {
       throw new Error('Invalid configuration');
     }
     this._config = config;
   }
 
-  set hass(hass) {
+  set hass(hass: HomeAssistant) {
     this._hass = hass;
   }
 
@@ -97,6 +160,28 @@ export class LittleBuddyCard extends LitElement {
     return val !== undefined && val !== null ? String(val) : '';
   }
 
+  /**
+   * Resolve the effective mood.
+   * 1) If `config.moods` trigger rules are present, evaluate them in order:
+   *    when a rule's `entity` matches `state`, that rule's `mood` wins.
+   * 2) Otherwise fall back to the `config.mood` entity (the classic path).
+   * 3) Final fallback: 'happy'.
+   */
+  private resolveMood(): string {
+    const rules = this._config?.moods;
+    if (Array.isArray(rules) && rules.length) {
+      for (const rule of rules) {
+        if (rule?.entity && rule?.state !== undefined && rule?.mood) {
+          if (this.getStateStr(rule.entity) === String(rule.state)) {
+            return rule.mood;
+          }
+        }
+      }
+    }
+    const mood = this.getStateStr(this._config?.mood);
+    return mood || 'happy';
+  }
+
   // Get XP per click from config entity or default 10
   private getXpPerClick(): number {
     const xpPerEntity = this._config?.xp_per_click;
@@ -115,7 +200,7 @@ export class LittleBuddyCard extends LitElement {
       if (gifState) return gifState;
     }
     // Otherwise construct from level and mood
-    const mood = this.getStateStr(this._config?.mood) || 'happy';
+    const mood = this.resolveMood();
     const levelNum = this.getStateNum(this._config?.level) || 1;
     const levelClamped = Math.min(Math.max(levelNum, 1), 5);
     return `/local/little-buddy-card/pets/level_${levelClamped}/${mood}.gif`;
@@ -157,7 +242,7 @@ export class LittleBuddyCard extends LitElement {
     const language = getLocale(this._hass);
     const strings = STRINGS[language as keyof typeof STRINGS] || STRINGS.en;
 
-    const mood = this.getStateStr(this._config?.mood) || 'happy';
+    const mood = this.resolveMood();
     const moodStr = strings[`mood_${mood}` as keyof typeof strings] || mood;
 
     const xpNum = this.getStateNum(this._config?.xp) || 0;
@@ -167,12 +252,13 @@ export class LittleBuddyCard extends LitElement {
     const hungerNum = this.getStateNum(this._config?.hunger) || 0;
     const energyNum = this.getStateNum(this._config?.energy) || 0;
     const happinessNum = this.getStateNum(this._config?.happiness) || 0;
+    const buddyName = this._config?.name || this._config?.title || 'Little Buddy';
 
     return html`
       <div class="card" @click=${this._handlePetClick}>
         <div class="header">
-          <div class="title">${strings.level}: ${level}</div>
-          <div class="xp">XP: ${xpNum}</div>
+          <div class="title">${buddyName}</div>
+          <div class="xp">${strings.level}: ${level} · XP: ${xpNum}</div>
         </div>
         <div class="content">
           <div class="pet-wrapper">

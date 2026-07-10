@@ -9,6 +9,7 @@ A **gamified Lovelace card** for [Home Assistant](https://www.home-assistant.io/
 - **Mood system** — 7 emotions (happy, sad, hungry, thirsty, sleepy, angry, playful) with animated GIF states
 - **Gamification loop** — XP, level progression (1–50), stat tracking (Health, Hunger, Energy, Happiness)
 - **Multi-language** — English 🇬🇧 and German 🇩🇪 support out of the box
+- **Interactive** — Click on your pet to gain XP (configurable amount)
 - **No Python backend needed** — Pure Lovelace card + native HA entities (`input_select`, `input_number`, `template` sensors, automations)
 
 ## 📋 Requirements
@@ -33,6 +34,7 @@ git clone https://github.com/icem0/little-buddy-card.git little-buddy-card
 ```
 
 Then add to `configuration.yaml`:
+
 ```yaml
 lovelace:
   modules:
@@ -57,7 +59,17 @@ Add these helpers in **Settings → Devices & Services → Helpers**:
 | `input_select.little_buddy_tree_level` | Select | seed, sprout, sapling, young_tree, full_grown |
 | `input_bool.little_buddy_is_awake` | Boolean | — |
 
-### Step 2: Add Template Sensors
+Optional entities (if you want to use them):
+
+| Helper | Type | Options/Range |
+|--------|------|-------------|
+| `input_number.little_buddy_xp_per_click` | Number (int) | 1–100 (default: 10) |
+| `input_text.little_buddy_gif_url` | Text | URL to a GIF (overrides pet image) |
+| `input_text.little_buddy_tree_gif_url` | Text | URL to a GIF (overrides tree image) |
+
+### Step 2: Add Template Sensors (Optional but recommended)
+
+If you want to use the card without manually updating the level, you can add these template sensors to automatically compute level from XP:
 
 ```yaml
 template:
@@ -75,7 +87,13 @@ template:
 
 ### Step 3: Add to Lovelace Dashboard
 
-YAML mode (or use the card's config panel):
+**Option A — Visual editor (recommended):**
+1. Open your dashboard in **Edit** mode → **+ Add Card**.
+2. Search for **Little Buddy Card** (registered automatically via `window.customCards`).
+3. Click it → the configuration panel opens. Pick your entities from the dropdowns, set a name, and optionally add **mood triggers** (which mood is activated by which entity state).
+4. Done — no YAML needed.
+
+**Option B — YAML:**
 
 ```yaml
 type: custom:little-buddy-card
@@ -90,23 +108,56 @@ entities:
   happiness: input_number.little_buddy_happiness
   tree_level: input_select.little_buddy_tree_level
   gif_url: sensor.little_buddy_gif_url
-tree_gif_url: sensor.little_buddy_tree_gif
+  tree_gif_url: sensor.little_buddy_tree_gif
+  xp_per_click: input_number.little_buddy_xp_per_click
 ```
+
+### Mood triggers (optional)
+
+Instead of (or in addition to) the `mood` entity, you can let **other entities**
+drive the pet's mood. In the visual editor, open **"Mood triggers"** and add
+rules. The first rule whose entity state matches wins; otherwise the `mood`
+entity is used. Example YAML equivalent:
+
+```yaml
+type: custom:little-buddy-card
+name: "Buddy"
+xp: input_number.little_buddy_xp
+mood: input_select.little_buddy_mood
+moods:
+  - mood: sleepy      # if bedroom_light == "off"
+    entity: light.bedroom
+    state: "off"
+  - mood: hungry      # if fridge_door just opened
+    entity: binary_sensor.fridge_door
+    state: "on"
+  - mood: angry       # if alarm is triggered
+    entity: alarm_control_panel.home
+    state: "triggered"
+```
+
+This lets you map *any* Home Assistant entity/state to one of the 7 moods
+(happy, sad, hungry, thirsty, sleepy, angry, playful) — without touching
+automations.
 
 ## 🎮 Gamification Mechanics
 
 ### XP System
-- **XP Sources:** Learning app events, automation triggers, manual service calls
+
+- **XP Sources:** Learning app events, automation triggers, manual service calls, or clicking on the pet
 - **Level Thresholds:** Level N requires `N * 1000` total XP
 - **Tree Growth:** Every 5 levels → next tree stage (seed → sprout → sapling → young_tree → full_grown)
 
 ### Mood Decay
+
 Automations decay mood stats over time:
+
 - Hunger increases by +2 every 30 min (max 100)
 - Energy decreases by -3 every hour while awake
 - Happiness drops when hunger > 70 or energy < 20
 
 ### Actions (Service Calls)
+
 ```yaml
 # Feed your buddy
 - service: input_number.set_value
@@ -115,6 +166,8 @@ Automations decay mood stats over time:
 # Play with buddy (gain XP + boost happiness)
 - service: python_script.gain_xp
   data: { amount: 50 }
+
+# Or simply click on the pet in the card to gain XP (amount configurable via input_number.little_buddy_xp_per_click)
 ```
 
 ## 🌍 Localization
