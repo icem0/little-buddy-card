@@ -140,6 +140,53 @@ This lets you map *any* Home Assistant entity/state to one of the 7 moods
 (happy, sad, hungry, thirsty, sleepy, angry, playful) — without touching
 automations.
 
+### Actions (tap / hold / double-tap)
+
+The pet card responds to interactions. By default, **tapping the pet grants
+XP** (amount from `xp_per_click`, default 10). You can override this with a
+custom `tap_action`, and add `hold_action` / `double_tap_action` (full HA
+action schema — same as any Lovelace card):
+
+```yaml
+type: custom:little-buddy-card
+name: "{{ states('sensor.buddy_name') }}"   # live template!
+xp: input_number.little_buddy_xp
+mood: input_select.little_buddy_mood
+tap_action:
+  action: toggle
+  entity: light.bedroom
+hold_action:
+  action: perform-action
+  service: input_number.set_value
+  data:
+    entity_id: input_number.little_buddy_happiness
+    value: 100
+double_tap_action:
+  action: more-info
+  entity: input_number.little_buddy_xp
+```
+
+> **Live templates:** `name` (and `title`) accept Jinja templates — they
+> update in real time via HA's websocket template subscription.
+
+### Asset extension (dev vs. final art)
+
+The card loads sprites from `/local/little-buddy-card/...`. While the animated
+GIF art pipeline is in progress, set `asset_ext: png` (default) to use the
+static placeholder PNGs shipped in `assets/`. Flip to `asset_ext: gif` once
+the real pixel-art sprites land — no code change needed, just drop the GIFs at
+the same paths.
+
+## 🍄 Mushroom-style integration
+
+The card follows the Mushroom card conventions so it feels at home next to
+other Mushroom cards:
+
+- Registers via `registerCustomCard()` (picker shows a **preview** + **docs link**)
+- Theme-aware: uses HA CSS variables (`--card-background-color`, `--accent-color`, `--mush-spacing`, …)
+- Visual editor built on HA's native `<ha-form>` with entity pickers
+- Live template rendering via `subscribeRenderTemplate`
+
 ## 🎮 Gamification Mechanics
 
 ### XP System
