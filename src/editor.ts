@@ -86,6 +86,19 @@ const BASE_SCHEMA = [
     label: 'Tree GIF URL entity (optional)',
     selector: { entity: { domain: ['sensor', 'input_text'] } },
   },
+  {
+    name: 'asset_ext',
+    label: 'Asset extension (png = dummy, gif = final art)',
+    selector: {
+      select: {
+        mode: 'dropdown',
+        options: [
+          { value: 'png', label: 'png (dev / dummy)' },
+          { value: 'gif', label: 'gif (final art)' },
+        ],
+      },
+    },
+  },
 ] as const;
 
 @customElement('little-buddy-card-editor')
@@ -201,6 +214,17 @@ export class LittleBuddyCardEditor extends LitElement implements LovelaceCardEdi
     `;
   }
 
+  private _previewUrl(): string {
+    const cfg = this._config;
+    if (!cfg) return '';
+    const ext = cfg.asset_ext === 'gif' ? 'gif' : 'png';
+    // Best-effort preview: read live state if hass present, else placeholder.
+    const mood = (cfg.mood && this.hass?.states?.[cfg.mood]?.state) || 'happy';
+    const lvlRaw = cfg.level ? this.hass?.states?.[cfg.level]?.state : undefined;
+    const lvl = Math.min(Math.max(parseInt(lvlRaw || '1', 10) || 1, 1), 5);
+    return `/local/little-buddy-card/pets/level_${lvl}/${mood}.${ext}`;
+  }
+
   render(): TemplateResult | typeof nothing {
     if (!this.hass || !this._config) {
       return nothing;
@@ -214,17 +238,46 @@ export class LittleBuddyCardEditor extends LitElement implements LovelaceCardEdi
           .computeLabel=${this._computeLabel}
           @value-changed=${this._valueChanged}
         ></ha-form>
+        <div class="preview">
+          <span class="preview-label">Vorschau (Pet)</span>
+          <img class="preview-img" src="${this._previewUrl()}" alt="preview" @error=${this._onPreviewError} />
+        </div>
         ${this._renderMoodRules()}
       </div>
     `;
+  }
+
+  private _onPreviewError(ev: Event) {
+    const img = ev.target as HTMLImageElement;
+    img.style.visibility = 'hidden';
   }
 
   static styles = css`
     .card-config {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: var(--mush-spacing, 16px);
       padding: 4px 0;
+      color: var(--primary-text-color, var(--text-color));
+    }
+    .preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px;
+      background: var(--secondary-background-color, var(--card-background-color));
+      border-radius: var(--ha-card-border-radius, 12px);
+      border: 1px solid var(--divider-color, #e0e0e0);
+    }
+    .preview-label {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+    .preview-img {
+      height: 96px;
+      width: auto;
+      image-rendering: pixelated;
     }
     .mood-section {
       border-top: 1px solid var(--divider-color, #e0e0e0);

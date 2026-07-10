@@ -83,14 +83,28 @@ export interface MoodTrigger {
 
 /**
  * Register the card with Home Assistant's card picker ("+ Add Card").
- * Without this entry the card only works via manual YAML — it never shows
- * up in the visual editor.
+ * Mushroom-style registration: adds `preview` + `documentationURL` so the
+ * card shows a live preview and a docs link in the picker. Without this the
+ * card only works via manual YAML.
  */
-(window as any).customCards = (window as any).customCards || [];
-(window as any).customCards.push({
+function registerCustomCard(params: {
+  type: string;
+  name: string;
+  description: string;
+  preview?: boolean;
+  documentationURL?: string;
+}): void {
+  const w = window as unknown as { customCards?: unknown[] };
+  w.customCards = w.customCards || [];
+  w.customCards.push({ ...params, preview: true });
+}
+
+registerCustomCard({
   type: 'little-buddy-card',
   name: 'Little Buddy Card',
   description: 'A gamified Lovelace card with growable pixel-art pets and trees.',
+  documentationURL:
+    'https://github.com/icem0/little-buddy-card/blob/main/README.md',
 });
 
 @customElement('little-buddy-card')
@@ -318,24 +332,28 @@ export class LittleBuddyCard extends LitElement {
   static get styles() {
     return css`
       .card {
-        padding: 16px;
+        --lbc-spacing: var(--mush-spacing, 12px);
+        padding: var(--lbc-spacing);
         background-color: var(--card-background-color, var(--background-color));
-        border-radius: var(--border-radius, 8px);
+        border-radius: var(--ha-card-border-radius, var(--border-radius, 12px));
+        box-shadow: var(--ha-card-box-shadow, none);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
+        gap: var(--lbc-spacing);
         cursor: pointer;
+        color: var(--primary-text-color, var(--text-color));
         transition: box-shadow 0.2s ease;
       }
       .card:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       .header {
         display: flex;
         justify-content: space-between;
         width: 100%;
         font-size: 1.1em;
+        color: var(--primary-text-color, var(--text-color));
       }
       .content {
         display: flex;
@@ -365,6 +383,7 @@ export class LittleBuddyCard extends LitElement {
         gap: 6px;
         width: 100%;
         font-size: 0.9em;
+        color: var(--secondary-text-color, var(--text-color));
       }
       .stat {
         display: flex;
@@ -372,6 +391,7 @@ export class LittleBuddyCard extends LitElement {
       }
       .label {
         font-weight: 500;
+        color: var(--secondary-text-color, var(--text-color));
       }
       .xp-bar {
         width: 100%;
@@ -388,7 +408,7 @@ export class LittleBuddyCard extends LitElement {
       }
       .xp-bar-fill {
         height: 100%;
-        background: var(--paper-item-selected-color, var(--accent-color));
+        background: var(--accent-color, var(--paper-item-selected-color));
         width: 0%;
         transition: width 0.2s ease;
       }
@@ -408,6 +428,7 @@ export class LittleBuddyCard extends LitElement {
         font-size: 0.9em;
         text-align: center;
         width: 100%;
+        color: var(--secondary-text-color, var(--text-color));
       }
       .hint {
         font-size: 0.75em;
