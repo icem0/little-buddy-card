@@ -71,6 +71,7 @@ export interface LittleBuddyCardConfig extends LovelaceCardConfig {
   gif_url?: string;
   tree_gif_url?: string;
   xp_per_click?: string;
+  asset_ext?: 'gif' | 'png';
   moods?: MoodTrigger[];
 }
 
@@ -193,17 +194,20 @@ export class LittleBuddyCard extends LitElement {
   }
 
   private getPetImageUrl(): string {
-    // If gif_url entity provided, use its state
+    // If gif_url (or png_url) entity provided, use its state
     const gifEntity = this._config?.gif_url;
     if (gifEntity) {
       const gifState = this.getStateStr(gifEntity);
       if (gifState) return gifState;
     }
-    // Otherwise construct from level and mood
+    // Otherwise construct from level and mood.
+    // asset_ext lets us swap between static .png placeholders (dev) and
+    // the final animated .gif assets (prod) without code changes.
+    const ext = this.assetExt();
     const mood = this.resolveMood();
     const levelNum = this.getStateNum(this._config?.level) || 1;
     const levelClamped = Math.min(Math.max(levelNum, 1), 5);
-    return `/local/little-buddy-card/pets/level_${levelClamped}/${mood}.gif`;
+    return `/local/little-buddy-card/pets/level_${levelClamped}/${mood}.${ext}`;
   }
 
   private getTreeImageUrl(): string {
@@ -212,8 +216,19 @@ export class LittleBuddyCard extends LitElement {
       const treeState = this.getStateStr(treeGifEntity);
       if (treeState) return treeState;
     }
+    const ext = this.assetExt();
     const treeLevel = this.getStateStr(this._config?.tree_level) || 'seed';
-    return `/local/little-buddy-card/trees/${treeLevel}.gif`;
+    return `/local/little-buddy-card/trees/${treeLevel}.${ext}`;
+  }
+
+  /**
+   * Asset file extension. Defaults to 'png' so the dev loop renders with the
+   * static dummy placeholders (scripts/generate_dummy_assets.py) instead of the
+   * not-yet-ready animated GIFs. Flip to 'gif' once the real art pipeline lands.
+   */
+  private assetExt(): string {
+    const ext = this._config?.asset_ext;
+    return ext === 'gif' || ext === 'png' ? ext : 'png';
   }
 
   private async _handlePetClick() {
