@@ -5,6 +5,7 @@
 import { LitElement, html, css, nothing, type TemplateResult } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
 import type { HomeAssistant, LovelaceCardEditor, LovelaceCardConfig } from 'custom-card-helpers';
+import { subscribeRenderTemplate, isTemplate, type RenderTemplateResult, type UnsubscribeFunc } from './ha-templates';
 
 /**
  * Detect active language from HA locale or fallback to browser default.
@@ -73,6 +74,19 @@ export interface LittleBuddyCardConfig extends LovelaceCardConfig {
   xp_per_click?: string;
   asset_ext?: 'gif' | 'png';
   moods?: MoodTrigger[];
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
+}
+
+export interface ActionConfig {
+  action?: 'more-info' | 'toggle' | 'navigate' | 'url' | 'perform-action' | 'call-service' | 'none' | 'custom:x' | string;
+  navigation_path?: string;
+  url_path?: string;
+  service?: string;
+  data?: Record<string, unknown>;
+  entity?: string;
+  [key: string]: unknown;
 }
 
 export interface MoodTrigger {
@@ -111,11 +125,16 @@ registerCustomCard({
 export class LittleBuddyCard extends LitElement {
   @state() private _config?: LittleBuddyCardConfig;
   @state() private _hass?: HomeAssistant;
+  @state() private _templateResults: Record<string, string> = {};
+
+  // Live template subscriptions (Mushroom-style subscribeRenderTemplate)
+  private _unsubTemplates: Map<string, Promise<UnsubscribeFunc>> = new Map();
 
   static get properties() {
     return {
       _config: { state: true },
       _hass: { state: true },
+      _templateResults: { state: true },
     };
   }
 
@@ -155,6 +174,65 @@ export class LittleBuddyCard extends LitElement {
 
   set hass(hass: HomeAssistant) {
     this._hass = hass;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._tryConnectTemplates();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._tryDisconnectTemplates();
+  }
+
+  /**
+   * Subscribe to live HA templates in template-capable config fields.
+   * Currently: `name`. Mirrors Mushroom's template-subscription pattern.
+   */
+  private _tryConnectTemplates(): void {
+    if (!this._hass || !this._config) return;
+    const fields: Record<string, string | undefined> = {
+      name: this._config.name,
+    };
+    for (const [key, raw] of Object.entries(fields)) {
+      if (this._unsubTemplates.has(key)) continue;
+      if (!raw || !isTemplate(raw)) continue;
+      try {
+        const sub = subscribeRenderTemplate(
+          this._hass.connection,
+          (result: RenderTemplateResult) => {
+            this._templateResults = {
+              ...this._templateResults,
+              [key]: result.result,
+            };
+          },
+          {
+            template: raw,
+            entity_ids: this._config?.mood,
+            variables: { config: this._config, user: this._hass.user?.name },
+            strict: true,
+          },
+        );
+        this._unsubTemplates.set(key, sub);
+      } catch {
+        /* template subscription unavailable — fall back to raw string */
+      }
+    }
+  }
+
+  private _tryDisconnectTemplates(): void {
+    this._unsubTemplates.forEach((subPromise) => {
+      subPromise.then((unsub) => unsub()).catch(() => {});
+    });
+    this._unsubTemplates.clear();
+  }
+
+  /** Resolve a config value, rendering it if it is a live template. */
+  private _resolveValue(raw: string | undefined, key: string): string {
+    if (!raw) return '';
+    if (!isTemplate(raw)) return raw;
+    return this._templateResults[key] ?? raw;
   }
 
   // Helper to get state value
@@ -245,7 +323,14 @@ export class LittleBuddyCard extends LitElement {
     return ext === 'gif' || ext === 'png' ? ext : 'png';
   }
 
-  private async _handlePetClick() {
+  private async _handlePetClick(ev?: Event) {
+    // If a custom tap_action is configured, run it instead of the default XP click.
+    const cfgAction = this._config?.tap_action;
+    if (cfgAction && cfgAction.action && cfgAction.action !== 'none') {
+      this._runAction(cfgAction);
+      return;
+    }
+    // Default behaviour: gain XP on the configured entity.
     if (!this._hass || !this._config?.xp) {
       return;
     }
@@ -260,6 +345,44 @@ export class LittleBuddyCard extends LitElement {
       });
     } catch (e) {
       console.error('Failed to set XP:', e);
+    }
+  }
+
+  /**
+   * Minimal action runner (Mushroom-style). Supports the common HA card
+   * actions: more-info, toggle, navigate, url, call-service/perform-action.
+   */
+  private _runAction(action: ActionConfig): void {
+    if (!this._hass) return;
+    const hass = this._hass;
+    switch (action.action) {
+      case 'more-info':
+        if (action.entity) {
+          hass.callService('homeassistant', 'more-info', { entity_id: action.entity });
+        }
+        break;
+      case 'toggle':
+        if (action.entity) hass.callService('homeassistant', 'toggle', { entity_id: action.entity });
+        break;
+      case 'navigate':
+        if (action.navigation_path) window.history.pushState(null, '', action.navigation_path);
+        break;
+      case 'url':
+        if (action.url_path) window.open(action.url_path, '_blank');
+        break;
+      case 'call-service':
+      case 'perform-action':
+        if (action.service) {
+          const [domain, service] = (action.service as string).split('.');
+          try {
+            hass.callService(domain, service, (action.data as Record<string, unknown>) ?? {});
+          } catch (e) {
+            console.error('Action failed:', e);
+          }
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -281,7 +404,7 @@ export class LittleBuddyCard extends LitElement {
     const hungerNum = this.getStateNum(this._config?.hunger) || 0;
     const energyNum = this.getStateNum(this._config?.energy) || 0;
     const happinessNum = this.getStateNum(this._config?.happiness) || 0;
-    const buddyName = this._config?.name || this._config?.title || 'Little Buddy';
+    const buddyName = this._resolveValue(this._config?.name || this._config?.title, 'name') || 'Little Buddy';
 
     return html`
       <div class="card" @click=${this._handlePetClick}>

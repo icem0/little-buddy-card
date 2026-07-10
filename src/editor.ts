@@ -101,6 +101,15 @@ const BASE_SCHEMA = [
   },
 ] as const;
 
+// Action fields rendered as raw YAML (Mushroom uses the same approach via
+// the action-struct editor). Keeps the editor simple while supporting the
+// full HA action schema.
+const ACTION_FIELDS: { key: keyof LittleBuddyCardConfig; label: string }[] = [
+  { key: 'tap_action', label: 'Tap action (YAML)' },
+  { key: 'hold_action', label: 'Hold action (YAML)' },
+  { key: 'double_tap_action', label: 'Double-tap action (YAML)' },
+];
+
 @customElement('little-buddy-card-editor')
 export class LittleBuddyCardEditor extends LitElement implements LovelaceCardEditor {
   @property({ attribute: false }) public hass?: HomeAssistant;
@@ -243,8 +252,43 @@ export class LittleBuddyCardEditor extends LitElement implements LovelaceCardEdi
           <img class="preview-img" src="${this._previewUrl()}" alt="preview" @error=${this._onPreviewError} />
         </div>
         ${this._renderMoodRules()}
+        ${this._renderActions()}
       </div>
     `;
+  }
+
+  private _renderActions(): TemplateResult {
+    return html`
+      <div class="actions-section">
+        <h3>Aktionen (tap / hold / double-tap)</h3>
+        ${ACTION_FIELDS.map(
+          (f) => html`
+            <div class="action-row">
+              <label>${f.label}</label>
+              <ha-yaml-editor
+                .hass=${this.hass}
+                .defaultValue=${{ action: 'none' }}
+                .value=${this._config?.[f.key] ?? { action: 'none' }}
+                @value-changed=${(e: CustomEvent) =>
+                  this._actionChanged(f.key, e.detail.value)}
+              ></ha-yaml-editor>
+            </div>
+          `,
+        )}
+      </div>
+    `;
+  }
+
+  private _actionChanged(key: keyof LittleBuddyCardConfig, value: unknown): void {
+    if (!this._config) return;
+    const newConfig = { ...this._config } as Record<string, unknown>;
+    // ha-yaml-editor emits undefined when empty -> treat as not set.
+    if (value == null || (typeof value === 'object' && Object.keys(value as object).length === 0)) {
+      delete newConfig[key as string];
+    } else {
+      newConfig[key as string] = value;
+    }
+    this._dispatchConfig(newConfig as LittleBuddyCardConfig);
   }
 
   private _onPreviewError(ev: Event) {
@@ -292,6 +336,26 @@ export class LittleBuddyCardEditor extends LitElement implements LovelaceCardEdi
       font-size: 0.8rem;
       opacity: 0.75;
       margin: 0 0 12px;
+    }
+    .actions-section {
+      border-top: 1px solid var(--divider-color, #e0e0e0);
+      padding-top: 12px;
+    }
+    .actions-section h3 {
+      font-size: 0.95rem;
+      margin: 0 0 8px;
+      color: var(--primary-text-color, #212121);
+    }
+    .action-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .action-row label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--secondary-text-color, var(--text-color));
     }
     .mood-rule {
       display: grid;
