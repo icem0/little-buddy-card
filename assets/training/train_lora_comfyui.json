@@ -1,0 +1,49 @@
+{
+  "doc": "SwarmUI / ComfyUI TrainLoraNode pass-through — Character-LoRA (Spec §4). Experimentell, läuft auf 4090 in 5-15 min. Trigger via POST http://192.168.178.53:7801/ComfyBackendDirect/prompt",
+  "prompt": {
+    "1": {
+      "class_type": "CheckpointLoaderSimple",
+      "inputs": { "ckpt_name": "stable-diffusion-xl-base-1.0.safetensors" }
+    },
+    "2": {
+      "class_type": "LoadImages",
+      "inputs": { "directory": "/root/little-buddy-card/assets/dataset/katharina/" }
+    },
+    "3": {
+      "class_type": "MakeTrainingDataset",
+      "inputs": {
+        "images": ["2"],
+        "vae": ["1", 3],
+        "clip": ["1", 1],
+        "texts": ["pixel art, katharina character, cute chibi kawaii girl, blonde hair in two long braids, (bright crimson red long dress:1.4) with puffy sleeves and white collar, white socks, black mary jane shoes, big round innocent eyes, sweet innocent, white background, masterpiece, highly detailed"]
+      }
+    },
+    "4": {
+      "class_type": "TrainLoraNode",
+      "inputs": {
+        "model": ["1", 0],
+        "latents": ["3", 0],
+        "positive": ["3", 1],
+        "batch_size": 1,
+        "grad_accumulation_steps": 1,
+        "steps": 1000,
+        "learning_rate": 0.0005,
+        "rank": 16,
+        "optimizer": "AdamW8bit",
+        "loss_function": "MSE",
+        "seed": 42,
+        "training_dtype": "bf16",
+        "lora_dtype": "bf16"
+      }
+    },
+    "5": {
+      "class_type": "LoraSave",
+      "inputs": {
+        "filename_prefix": "loras/katharina_char_lora",
+        "rank": 16,
+        "lora_type": "standard",
+        "bias_diff": true
+      }
+    }
+  }
+}
