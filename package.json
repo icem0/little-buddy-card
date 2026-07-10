@@ -1,6 +1,6 @@
 {
   "name": "little-buddy-card",
-  "version": "0.2.0",
+  "version": "0.7.1",
   "description": "Gamified Home Assistant Lovelace card with pixel pets and trees",
   "main": "dist/little-buddy-card.js",
   "scripts": {
