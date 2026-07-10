@@ -1,5 +1,6 @@
 {
   "name": "Little Buddy Card",
   "render_readme": true,
-  "filename": "little-buddy-card.js"
+  "filename": "little-buddy-card.js",
+  "content_in_root": true
 }
