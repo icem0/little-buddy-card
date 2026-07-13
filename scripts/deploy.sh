@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 # deploy.sh — Build the card and deploy assets to Home Assistant.
 #
-# PURPOSE: After editing source or pulling newer assets, run this once and
-# the card is updated. Copies dist + asset folders into
-# /config/www/community/little-buddy-card/ which is served by HA at
-# /local/little-buddy-card/.
+# HACS 2026-summer: for category=INTEGRATION (which Lovelace cards are),
+# HACS downloads the entire custom_components/<domain>/ directory from the
+# repo into www/community/<repo>/. So this script rsyncs that one dir.
 #
 # USAGE:
 #   bash scripts/deploy.sh                 # uses HA_PATH=/config/www
 #   HA_PATH=/custom/path bash deploy.sh    # override target
 #   DRY_RUN=1 bash deploy.sh               # print actions, do not copy
 #
-# EXIT: 0 on success, 1 if HA path is missing.
+# EXIT: 0 on success, 1 if HA path is missing or build failed.
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -31,8 +30,9 @@ if ! npm run build --silent; then
 fi
 
 # --- 2. Sanity ---
-if [[ ! -s dist/little-buddy-card.js ]]; then
-  echo "✗ dist/little-buddy-card.js is missing or empty." >&2
+BUNDLE="custom_components/little_buddy_card/dist/little-buddy-card.js"
+if [[ ! -s "$BUNDLE" ]]; then
+  echo "✗ $BUNDLE is missing or empty." >&2
   exit 1
 fi
 
@@ -46,27 +46,27 @@ if [[ ! -d "$HA_PATH" && "$DRY_RUN" != "1" ]]; then
 fi
 
 # --- 4. Copy ---
+# HACS lays out the custom_components/<domain>/ tree flat under
+# www/community/<repo>/. We mirror that here.
 copy() {
   local src="$1" label="$2"
   if [[ "$DRY_RUN" == "1" ]]; then
-    echo "  [dry-run] would copy: $src → $HA_PATH/"
+    echo "  [dry-run] would copy: $src/ → $HA_PATH/"
   else
     cp -r "$src" "$HA_PATH/"
     echo "  ✓ $label: $(du -sh "$HA_PATH/${src##*/}" 2>/dev/null | cut -f1)"
   fi
 }
 
-echo "→ Copying to $HA_PATH …"
-copy "dist"                       "card bundle"
-copy "assets/pets"                "pet placeholders (35)"
-copy "assets/trees"               "tree placeholders (5)"
+echo "→ Copying custom_components/little_buddy_card/ → $HA_PATH …"
+copy "custom_components/little_buddy_card/dist" "card bundle"
+copy "custom_components/little_buddy_card/assets" "pet + tree placeholders (40)"
 
 # --- 5. Summary ---
 echo
 echo "✅ Deploy complete."
-echo "   Card served at:  /local/little-buddy-card/little-buddy-card.js"
-echo "   Pet images:      /local/little-buddy-card/pets/level_{1-5}/{mood}.{png,gif}"
-echo "   Tree images:     /local/little-buddy-card/trees/{stage}.{png,gif}"
+echo "   Bundle:       /local/little-buddy-card/dist/little-buddy-card.js"
+echo "   Pet sprites:  /local/little-buddy-card/assets/pets/level_{1-5}/{mood}.png"
+echo "   Tree sprites: /local/little-buddy-card/assets/trees/{stage}.png"
 echo
-echo "Next: in HA, Settings → Developer Tools → YAML → 'Reload all YAML files'"
-echo "      then hard-refresh your dashboard (Ctrl+Shift+R)."
+echo "Next: in HA, hard-refresh your dashboard (Ctrl+Shift+R)."

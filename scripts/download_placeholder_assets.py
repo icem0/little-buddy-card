@@ -6,8 +6,7 @@ WHY: The real pixel-art pipeline (ASSET-1..6) runs in parallel and is not
 ready. To keep the card renderable and visually distinguishable during
 development, this script pulls 40 free placeholder images (variations of
 dogs via placedog.net, seeded per file) and writes them to the expected
-asset paths. The character design / sprites will later replace these files
-in-place — no Card code change required (asset_ext: 'png' default).
+asset paths inside the HACS custom_components/ tree.
 
 Once the real character art lands, simply overwrite the same files (or run
 `scripts/generate_dummy_assets.py` to fall back to flat placeholders).
@@ -18,18 +17,15 @@ import urllib.request
 import urllib.error
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(ROOT, "assets")
+ASSETS = os.path.join(ROOT, "custom_components", "little_buddy_card", "assets")
 
 MOODS = ["happy", "sad", "hungry", "thirsty", "sleepy", "angry", "playful"]
 LEVELS = [1, 2, 3, 4, 5]
 TREES = ["seed", "sprout", "sapling", "young_tree", "full_grown"]
 
-# Smaller is plenty for placeholders (card renders at 128x128). Smaller = faster.
 SIZE = 128
 SOURCE = "https://placedog.net"
-# Per-file timeout: aggressive to keep the loop snappy.
 TIMEOUT = 8
-# Concurrent download workers.
 WORKERS = 8
 
 
@@ -38,7 +34,7 @@ def fetch(url: str, dest: str, timeout: int = TIMEOUT) -> bool:
         req = urllib.request.Request(url, headers={"User-Agent": "little-buddy-card-dev/1.0"})
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             data = resp.read()
-        if len(data) < 200:  # too small -> treat as fail
+        if len(data) < 200:
             return False
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         with open(dest, "wb") as f:

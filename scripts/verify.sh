@@ -25,24 +25,25 @@ echo "────────────────────────�
 # 1. dist bundle
 echo
 echo "[1] Build artefacts"
-if [[ -s dist/little-buddy-card.js ]]; then
-  size=$(stat -c%s dist/little-buddy-card.js 2>/dev/null || stat -f%z dist/little-buddy-card.js)
-  ok "dist/little-buddy-card.js exists (${size} bytes)"
+bundle="custom_components/little_buddy_card/dist/little-buddy-card.js"
+if [[ -s "$bundle" ]]; then
+  size=$(stat -c%s "$bundle" 2>/dev/null || stat -f%z "$bundle")
+  ok "$bundle exists (${size} bytes)"
   if (( size < 20000 )); then
-    warn "dist looks small (<20KB) — was the build minified?"
+    warn "bundle looks small (<20KB) — was the build minified?"
   fi
 else
-  err "dist/little-buddy-card.js missing or empty — run: npm run build"
+  err "$bundle missing or empty — run: npm run build"
 fi
 
-# 2. mtime: dist newer than src?
-src_mtime=$(find src -type f -name '*.ts' -printf '%T@\n' 2>/dev/null | sort -nr | head -1)
-dist_mtime=$(stat -c%Y dist/little-buddy-card.js 2>/dev/null || stat -f%m dist/little-buddy-card.js)
-if [[ -n "${src_mtime:-}" && -n "${dist_mtime:-}" ]]; then
-  if (( $(printf "%.0f" "$src_mtime") > dist_mtime )); then
-    err "src/ is newer than dist/ — re-run: npm run build"
+# 2. mtime: bundle newer than src?
+src_mtime=$(find custom_components/little_buddy_card/src -type f -name '*.ts' -printf '%T@\n' 2>/dev/null | sort -nr | head -1)
+bundle_mtime=$(stat -c%Y "$bundle" 2>/dev/null || stat -f%m "$bundle")
+if [[ -n "${src_mtime:-}" && -n "${bundle_mtime:-}" ]]; then
+  if (( $(printf "%.0f" "$src_mtime") > bundle_mtime )); then
+    err "src/ is newer than bundle — re-run: npm run build"
   else
-    ok "dist is up-to-date with src/"
+    ok "bundle is up-to-date with src/"
   fi
 fi
 
@@ -52,7 +53,7 @@ echo "[2] Placeholder assets"
 missing_pets=0
 for lvl in 1 2 3 4 5; do
   for mood in happy sad hungry thirsty sleepy angry playful; do
-    f="assets/pets/level_${lvl}/${mood}.png"
+    f="custom_components/little_buddy_card/assets/pets/level_${lvl}/${mood}.png"
     if [[ ! -s "$f" ]]; then
       err "missing/empty: $f"
       missing_pets=$((missing_pets+1))
@@ -67,7 +68,7 @@ fi
 
 missing_trees=0
 for stage in seed sprout sapling young_tree full_grown; do
-  f="assets/trees/${stage}.png"
+  f="custom_components/little_buddy_card/assets/trees/${stage}.png"
   if [[ ! -s "$f" ]]; then
     err "missing/empty: $f"
     missing_trees=$((missing_trees+1))
@@ -82,7 +83,7 @@ fi
 # 4. manifest
 echo
 echo "[3] Manifest"
-version=$(python3 -c "import json;print(json.load(open('manifest.json'))['version'])" 2>/dev/null || echo "unknown")
+version=$(python3 -c "import json;print(json.load(open('custom_components/little_buddy_card/manifest.json'))['version'])" 2>/dev/null || echo "unknown")
 ok "manifest version: $version"
 if [[ "$version" == "0.0.0" ]]; then
   err "manifest version still 0.0.0 — did you forget to bump?"

@@ -17,3 +17,16 @@ Session: 4677ad24b5ffb833...
   ✓ /root/little-buddy-card/assets/characters/katharina/master/master_v3_strong_pin.png (488 KB)
 
 [v4_no_shadow_neg] cfg=7.0, steps=30, seed=42
+  ✓ /root/little-buddy-card/assets/characters/katharina/master/master_v4_no_shadow_neg.png (350 KB)
+
+=== FERTIG — 4 Varianten bereit zur Abnahme ===
+Output: /root/little-buddy-card/assets/characters/katharina/master/
+  master_v1.png: 241 KB
+  master_v1_baseline.png: 376 KB
+  master_v2_soft_shadow.png: 494 KB
+  master_v3_strong_pin.png: 488 KB
+  master_v4_no_shadow_neg.png: 350 KB
+
+USER-BEWERTUNG ERWARTET:
+  Welche der 4 Varianten sieht am meisten nach Katharina aus?
+  Sag den Namen (v1_baseline / v2_soft_shadow / v3_strong_pin / v4_no_shadow_neg).

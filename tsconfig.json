@@ -1,19 +1,28 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "lib": ["es2022", "dom", "dom.iterable"],
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "outDir": "./dist",
-    "sourceMap": true,
     "strict": false,
-    "noUnusedLocals": false,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "rootDir": "src",
-    "declaration": false
+    "resolveJsonModule": true,
+    "outDir": "./custom_components/little_buddy_card/dist",
+    "rootDir": "./custom_components/little_buddy_card/src",
+    "declaration": false,
+    "sourceMap": false,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "custom_components/little_buddy_card/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "scripts"
+  ]
 }

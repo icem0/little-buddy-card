@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """
-build_release_zip.py — Bundle the card + assets into a HACS-ready ZIP.
+Build a HACS release asset: dist/little-buddy-card.zip containing only the
+runtime payload (the bundle + the 40 placeholder sprites), nothing else.
 
-HACS for Lovelace cards (HacsCategory.INTEGRATION with content_in_root=true)
-downloads the asset(s) attached to the latest GitHub release. To ship the
-card JS + all 40 placeholder sprites, we create a single ZIP that has
-everything in the repository root, matching the paths the Card resolves at
-runtime (/local/little-buddy-card/...).
+HACS for category=INTEGRATION (incl. Lovelace cards, in HACS 2026-summer)
+downloads the contents of custom_components/<domain>/ from the repo tree
+into www/community/<repo>/. This ZIP is therefore a *convenience* /
+fallback for users who prefer manual install via wget + unzip, not a
+required install path.
 
-OUTPUT: dist/little-buddy-card.zip containing:
-  - little-buddy-card.js       (built bundle)
-  - assets/pets/level_*/...    (35 pet sprites)
-  - assets/trees/...           (5 tree sprites)
+For the normal HACS install path see .github/workflows/release.yml — the
+custom_components/ tree is the source of truth.
 """
 import os
 import sys
@@ -20,44 +19,34 @@ import zipfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST = os.path.join(ROOT, "dist")
 OUT = os.path.join(DIST, "little-buddy-card.zip")
-
-REQUIRED = [
-    "dist/little-buddy-card.js",
-    "assets/pets",
-    "assets/trees",
-]
+CC = os.path.join(ROOT, "custom_components", "little_buddy_card")
 
 
 def main():
-    missing = [p for p in REQUIRED if not os.path.exists(os.path.join(ROOT, p))]
-    if missing:
-        print(f"✗ Missing required paths: {missing}")
-        print("  Run: npm run build && python3 scripts/download_placeholder_assets.py")
+    bundle = os.path.join(CC, "dist", "little-buddy-card.js")
+    if not os.path.exists(bundle):
+        print(f"✗ {bundle} missing — run: npm run build")
         return 1
 
+    os.makedirs(DIST, exist_ok=True)
     if os.path.exists(OUT):
         os.remove(OUT)
 
     written = 0
     with zipfile.ZipFile(OUT, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
-        # 1) the bundle
-        bundle = "dist/little-buddy-card.js"
-        zf.write(os.path.join(ROOT, bundle), arcname="little-buddy-card.js")
+        # The bundle at the top level (so users can wget+unzip and get
+        # the .js without a custom_components/ prefix).
+        zf.write(bundle, arcname="little-buddy-card.js")
         written += 1
-        # 2) pets
-        for dirpath, _, files in os.walk(os.path.join(ROOT, "assets", "pets")):
-            for f in files:
-                src = os.path.join(dirpath, f)
-                arc = os.path.relpath(src, os.path.join(ROOT, "assets"))
-                zf.write(src, arcname=f"assets/{arc}")
-                written += 1
-        # 3) trees
-        for dirpath, _, files in os.walk(os.path.join(ROOT, "assets", "trees")):
-            for f in files:
-                src = os.path.join(dirpath, f)
-                arc = os.path.relpath(src, os.path.join(ROOT, "assets"))
-                zf.write(src, arcname=f"assets/{arc}")
-                written += 1
+        # All 40 sprites flat at the top of the zip (matches the path
+        # scheme the card expects at /local/little-buddy-card/).
+        for sub in ("pets", "trees"):
+            for dirpath, _, files in os.walk(os.path.join(CC, "assets", sub)):
+                for f in files:
+                    src = os.path.join(dirpath, f)
+                    arc = os.path.relpath(src, os.path.join(CC, "assets"))
+                    zf.write(src, arcname=f"assets/{arc}")
+                    written += 1
 
     size = os.path.getsize(OUT)
     print(f"✅ {OUT}")
