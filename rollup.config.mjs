@@ -20,7 +20,6 @@ export default {
     typescript({
       tsconfig: path.resolve(__dirname, 'tsconfig.json'),
       compilerOptions: { target: 'ES2022' },
-      inlineSources: true,
     }),
     terser({ ecma: 2022 }),
   ],
