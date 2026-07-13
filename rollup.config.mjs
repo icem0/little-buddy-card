@@ -6,14 +6,8 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const ENTRY = path.resolve(
-  __dirname,
-  'custom_components/little_buddy_card/src/little-buddy-card.ts'
-);
-const OUT = path.resolve(
-  __dirname,
-  'custom_components/little_buddy_card/dist/little-buddy-card.js'
-);
+const ENTRY = path.resolve(__dirname, 'src/little-buddy-card.ts');
+const OUT = path.resolve(__dirname, 'little-buddy-card.js');
 
 export default {
   input: ENTRY,

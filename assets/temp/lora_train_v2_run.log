@@ -1,0 +1,25 @@
+=== katharina_train_lora_v2 (KORRIGIERT) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+Dataset: /root/little-buddy-card/assets/training/katharina_char_v1/images
+LoRA: katharina_char_lora_v1.safetensors
+
+Fixes vs v1:
+  optimizer: AdamW (war AdamW8bit=INVALID)
+  rank: 8 (war 16)
+  learning_rate: 0.0005 (war 1e-4)
+  gradient_checkpointing: True (war False)
+  MakeTrainingDataset: latents[0], positive[1] (war falsch)
+  steps: 300 (bei 2 Bildern: weniger Overfit)
+
+Dataset: 2 Bilder, 2 Captions
+Seed: 5269 (random)
+Steps: 344 (variiert)
+Output-Prefix: loras/katharina_char_lora_v1_51645
+
+Workflow: 5 Nodes
+Prompt ID: 1c369ddd-19bb-4002-a996-3bbab758480c
+Warte auf Training (poll jede 30s)...
+  ✓ Training fertig
+  Keine Outputs in History (LoRA evtl. auf Disk)
+
+=== CHECK: LoRA-Datei auf Backend ===

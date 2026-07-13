@@ -1,0 +1,39 @@
+=== katharina_train_lora_v2 (KORRIGIERT) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+Dataset: /root/little-buddy-card/assets/training/katharina_char_v1/images_v2
+LoRA: katharina_char_lora_v1.safetensors
+
+Fixes vs v1:
+  optimizer: AdamW (war AdamW8bit=INVALID)
+  rank: 8 (war 16)
+  learning_rate: 0.0005 (war 1e-4)
+  gradient_checkpointing: True (war False)
+  MakeTrainingDataset: latents[0], positive[1] (war falsch)
+  steps: 300 (bei 2 Bildern: weniger Overfit)
+
+Dataset: 2 Bilder, 2 Captions
+Seed: 8038 (random)
+Steps: 346 (variiert)
+Output-Prefix: loras/katharina_char_lora_v1_51955
+Unique Text: cache_bypass_2026-07-13T16:12:35.377038_36533
+
+Workflow: 6 Nodes
+
+RestartBackends (Cache leeren)...
+  ✓ Backends restartet (Cache geleert)
+  ⚠ Backend nicht rechtzeitig bereit
+Traceback (most recent call last):
+  File "/root/little-buddy-card/assets/workflows/build_katharina_train_lora_v2.py", line 204, in <module>
+    pid = submit_workflow(wf)
+          ^^^^^^^^^^^^^^^^^^^
+  File "/root/little-buddy-card/assets/workflows/build_katharina_train_lora_v2.py", line 142, in submit_workflow
+    raise Exception(f"Submit failed: {r.status_code} {r.text[:300]}")
+Exception: Submit failed: 400 <!DOCTYPE html>
+<html>
+<head>
+<style>body{background-color:#101010;color:#eeeeee;}</style>
+</head>
+<body>
+<span class="comfy-failed-to-load">No ComfyUI backend available, loading failed.</span>
+</body>
+</html>

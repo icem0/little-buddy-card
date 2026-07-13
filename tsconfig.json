@@ -5,12 +5,11 @@
     "moduleResolution": "node",
     "strict": false,
     "experimentalDecorators": true,
-    "useDefineForClassFields": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "outDir": "./custom_components/little_buddy_card/dist",
-    "rootDir": "./custom_components/little_buddy_card/src",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "declaration": false,
     "sourceMap": false,
     "isolatedModules": true,
@@ -18,7 +17,7 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
   "include": [
-    "custom_components/little_buddy_card/src/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -1,0 +1,22 @@
+=== katharina_train_lora_v3 (Cache-Umgehung: separate LoadImage pro Bild) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+Dataset: /root/little-buddy-card/assets/training/katharina_char_v1/images
+Rank: 8, Steps: 300, LR: 0.0005, Optimizer: AdamW
+
+Geladene Bilder: 2
+  [1] 01_master.png: 573 Zeichen Caption
+  [2] 02_train.png: 596 Zeichen Caption
+
+=== Bilder zu ComfyUI hochladen ===
+  ✓ Upload: 01_master.png
+  ✓ Upload: 02_train.png
+
+Seed: 9808, Steps: 345, Prefix: loras/katharina_char_lora_v1_v3_52759
+Workflow: 9 Nodes (strukturell anders als v2 → kein Cache)
+Prompt ID: d39a1866-9f7b-4fc7-8750-4ad153c753ec
+Warte auf Training...
+✓ Training abgeschlossen
+Keine Outputs (LoRA auf Disk)
+
+=== LoRA-Check ===
+  ✗ Keine katharina-LoRA gefunden
