@@ -1,0 +1,55 @@
+=== katharina_characterset_v4 (Single char + Outfit-Pin) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+Pixel-LoRA: concept\Pixel_Art_XL_-_v1-1.safetensors (weight 0.85)
+CharTurn-LoRA: pony\character\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors (weight 0.2, war 0.3 in v3)
+Resolution: 1024x1024
+Seed: 100 (KONSISTENT für alle Views — Katharina bleibt gleich groß)
+Outfit-Anker: knee-high socks covering full legs, no bare legs
+Negativ: size_difference, two characters, background pattern/asset/symbol
+
+Session: 33547d7b01271d69...
+
+[1/6] 01_front (seed 100)
+  Pose: front view, looking at viewer, standing straight, both arms at sides, turnaround sheet, multiple vie
+  Steps: 28, Cfg: 7.5, Denoise: 1.0
+  Prompt ID: 26691e92-919f-4903-a69f-0dc2c7661617
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v4/01_front.png (640 KB)
+
+[2/6] 02_3quarter_left (seed 100)
+  Pose: three quarter view from the left, slight turn, gentle smile, head slightly tilted, character design 
+  Steps: 30, Cfg: 7.6, Denoise: 0.995
+  Prompt ID: 8bf000b1-92b1-4087-8409-c26291f64e14
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v4/02_3quarter_left.png (690 KB)
+
+[3/6] 03_side_right (seed 100)
+  Pose: side view facing right, profile, standing still, calm expression, model sheet reference, turnaround
+  Steps: 32, Cfg: 7.7, Denoise: 0.99
+  Prompt ID: 570e532b-6a72-4fe9-b74c-7123c0d8c3d5
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v4/03_side_right.png (788 KB)
+
+[4/6] 04_back_3quarter (seed 100)
+  Pose: three quarter view from behind, mostly back, slight head turn to the right, turnaround, multiple vie
+  Steps: 34, Cfg: 7.8, Denoise: 0.985
+  Prompt ID: 3f6cf4bc-e3a9-40b4-9a09-b4903e38ace7
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v4/04_back_3quarter.png (702 KB)
+
+[5/6] 05_low_angle (seed 100)
+  Pose: slight low angle view, looking up at the character, gentle pose, character reference, turnaround she
+  Steps: 36, Cfg: 7.9, Denoise: 0.98
+  Prompt ID: 75148901-81a3-49f6-9fd4-aaad3efeae68
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v4/05_low_angle.png (656 KB)
+
+[6/6] 06_top_down (seed 100)
+  Pose: high angle view, looking down at character, full body, character sheet layout, multiple views
+  Steps: 38, Cfg: 8.0, Denoise: 0.975
+  Prompt ID: 12237e09-6e34-4775-a1da-6d51ed25d190
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v4/06_top_down.png (637 KB)
+
+=== FERTIG ===
+Output: /root/little-buddy-card/assets/characters/katharina/views_v4/
+  01_front.png: 640 KB
+  02_3quarter_left.png: 690 KB
+  03_side_right.png: 788 KB
+  04_back_3quarter.png: 702 KB
+  05_low_angle.png: 656 KB
+  06_top_down.png: 637 KB

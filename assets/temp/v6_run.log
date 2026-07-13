@@ -1,0 +1,42 @@
+=== katharina_characterset_v6 (BASE-WECHSEL: autismmixSDXL) ===
+Base: autismmixSDXL_autismmixPony_258042.safetensors (Illustrious-Pony-Mix, cute-spezialisiert)
+Pixel-LoRA: concept\Pixel_Art_XL_-_v1-1.safetensors (weight 0.85)
+CharTurn-LoRA: RAUS (weight 0.0)
+Seed: 100 (konstant), Steps: 35 (fix), Cfg: 7.0 (fix)
+Winkel: nur via Trigger-Wörter, kein LoRA
+Katharina-Specs: unverändert
+
+Session: fc7da526732ccf76...
+
+[1/6] 01_front (seed 100)
+  Cfg: 7.0, Denoise: 1.0
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v6/01_front.png (676 KB)
+
+[2/6] 02_3quarter_left (seed 100)
+  Cfg: 7.08, Denoise: 0.992
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v6/02_3quarter_left.png (552 KB)
+
+[3/6] 03_side_right (seed 100)
+  Cfg: 7.16, Denoise: 0.984
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v6/03_side_right.png (651 KB)
+
+[4/6] 04_back_3quarter (seed 100)
+  Cfg: 7.24, Denoise: 0.976
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v6/04_back_3quarter.png (806 KB)
+
+[5/6] 05_low_angle (seed 100)
+  Cfg: 7.32, Denoise: 0.968
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v6/05_low_angle.png (677 KB)
+
+[6/6] 06_top_down (seed 100)
+  Cfg: 7.4, Denoise: 0.96
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v6/06_top_down.png (719 KB)
+
+=== FERTIG ===
+Output: /root/little-buddy-card/assets/characters/katharina/views_v6/
+  01_front.png: 676 KB
+  02_3quarter_left.png: 552 KB
+  03_side_right.png: 651 KB
+  04_back_3quarter.png: 806 KB
+  05_low_angle.png: 677 KB
+  06_top_down.png: 719 KB

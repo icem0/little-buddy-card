@@ -1,0 +1,23 @@
+{
+  "id": "katharina_characterset_v1",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 0,
+  "nodes": [],
+  "links": [],
+  "groups": [],
+  "definitions": {
+    "subgraphs": []
+  },
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    }
+  },
+  "version": 0.4
+}

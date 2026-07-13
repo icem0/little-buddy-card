@@ -1,0 +1,54 @@
+=== katharina_characterset_v2 (Pony CharTurn LoRA) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+LoRA: pony\character\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors
+LoRA weight: 0.7
+Resolution: 1536x1024 (Author-Empfehlung)
+
+Session: 7ef9ed86f3ab1d1d...
+
+[1/6] 01_front (seed 100)
+  Pose: front view, looking at viewer, standing straight, both arms at sides, turnaround sheet, multiple vie
+  Steps: 28, Cfg: 7.5, Denoise: 1.0
+  Prompt ID: e58b5f51-ed6c-4304-8a22-b3c4fe6bc1cc
+  [cache] Prompt completed but no outputs (cached or empty)
+  ✗ Cached run with no outputs — Cache-Bypass hat nicht gegriffen, retry mit seed+1000
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v2/01_front.png (1175 KB)
+
+[2/6] 02_3quarter_left (seed 107)
+  Pose: three quarter view from the left, slight turn, gentle smile, head slightly tilted, character design 
+  Steps: 29, Cfg: 7.55, Denoise: 0.999
+  Prompt ID: f1dc9475-3135-44f3-8a76-7ae06071baf2
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v2/02_3quarter_left.png (1062 KB)
+
+[3/6] 03_side_right (seed 114)
+  Pose: side view facing right, profile, standing still, calm expression, model sheet reference
+  Steps: 30, Cfg: 7.6, Denoise: 0.998
+  Prompt ID: 34100489-c3c3-42f0-8248-3cd884a7d2c0
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v2/03_side_right.png (1095 KB)
+
+[4/6] 04_back_3quarter (seed 121)
+  Pose: three quarter view from behind, mostly back, slight head turn to the right, turnaround
+  Steps: 31, Cfg: 7.65, Denoise: 0.997
+  Prompt ID: 69b34723-493c-464c-9622-a9b2285ca0a7
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v2/04_back_3quarter.png (1024 KB)
+
+[5/6] 05_low_angle (seed 128)
+  Pose: slight low angle view, looking up at the character, gentle pose, character reference
+  Steps: 32, Cfg: 7.7, Denoise: 0.996
+  Prompt ID: 609ad5bf-2aa6-46ed-b927-167af8795dd9
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v2/05_low_angle.png (941 KB)
+
+[6/6] 06_top_down (seed 135)
+  Pose: high angle view, looking down at character, full body, character sheet layout
+  Steps: 33, Cfg: 7.75, Denoise: 0.995
+  Prompt ID: ad3b595e-238e-4af7-869a-51c137c92146
+  ✓ /root/little-buddy-card/assets/characters/katharina/views_v2/06_top_down.png (1067 KB)
+
+=== FERTIG ===
+Output: /root/little-buddy-card/assets/characters/katharina/views_v2/
+  01_front.png: 1175 KB
+  02_3quarter_left.png: 1062 KB
+  03_side_right.png: 1095 KB
+  04_back_3quarter.png: 1024 KB
+  05_low_angle.png: 941 KB
+  06_top_down.png: 1067 KB

@@ -82,9 +82,58 @@ template:
       - name: "Little Buddy Tree GIF"
         state: >
           {% set tree = states('input_select.little_buddy_tree_level') %}
-          '/local/little-buddy-card/trees/{{ tree }}.gif'
 ```
 
+## 🚀 First Run (0 → working card in 5 minutes)
+
+> Assumes a clean Home Assistant + the helpers from
+> `examples/package/little_buddy_helpers.yaml` not yet imported. If you
+> already have your own input_helpers, skip to step 3.
+
+1. **HACS — install the card**
+   - *Settings → Devices & Services → HACS → Frontend* → search **"Little Buddy Card"**
+   - If you don't see it: *HACS → ⋯ → Custom repositories* → URL
+     `https://github.com/icem0/little-buddy-card`, Category **Lovelace** → *Add*
+     → repeat search
+   - Click **Download** on the latest version (v0.8.1+)
+2. **Import the input_helpers** (one-shot)
+   - In your HA config dir, add to `configuration.yaml`:
+     ```yaml
+     homeassistant:
+       packages: !include_dir_named packages
+     ```
+   - Copy `examples/package/little_buddy_helpers.yaml` to `/config/packages/`
+   - *Developer Tools → YAML → Reload all YAML files*
+   - Check *Developer Tools → States* — you should see `input_number.little_buddy_xp` etc.
+3. **Deploy assets to HA's www folder** (one-shot, or after each asset update)
+   ```bash
+   bash scripts/deploy.sh
+   # or with a custom target:
+   HA_PATH=/custom/target bash scripts/deploy.sh
+   ```
+   This builds the bundle and copies `dist/` + `assets/` to
+   `/config/www/community/little-buddy-card/`. Sanity-check: the file
+   `http://your-ha:8123/local/little-buddy-card/pets/level_1/happy.png`
+   should return 200.
+4. **Sanity-check the deploy**
+   ```bash
+   bash scripts/verify.sh
+   ```
+   Prints "✅ All checks passed" when everything is wired up.
+5. **Drop the card**
+   - Open your dashboard → *Edit* → **+ Add Card**
+   - Search **"Little Buddy Card"** (shows preview + docs link thanks to
+     `registerCustomCard`)
+   - The card will pre-fill with sensible defaults — adjust entities in the
+     visual editor if needed
+   - For a one-shot config instead, open *Show Code Editor* and paste
+     [`examples/mock-config.yaml`](examples/mock-config.yaml)
+6. **Full dashboard example** — paste into your Lovelace raw config:
+   [`examples/lovelace-dashboard.yaml`](examples/lovelace-dashboard.yaml)
+
+That's it. Tap the pet to gain XP. 🎉
+
+## ⚙️ Configuration
 ### Step 3: Add to Lovelace Dashboard
 
 **Option A — Visual editor (recommended):**

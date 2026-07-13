@@ -1,0 +1,119 @@
+# Little Buddy Card — Beispiel-Dashboard-View
+#
+# PURPOSE: Eine vollständige Lovelace-View mit der Little Buddy Card in der
+# Mitte, flankiert von Mushroom-Stats und einem Feed-Button.
+#
+# INSTALL: In HA → Settings → Dashboards → ⋯ → Raw configuration editor →
+# Diese View unter `views:` einfügen (oder als komplette Dashboard-YAML
+# benutzen, falls du ein neues Test-Dashboard anlegst).
+#
+# REQUIRES: Mushroom-Cards via HACS (https://github.com/piitaya/lovelace-mushroom)
+#           + die little_buddy_helpers aus examples/package/
+
+title: Little Buddy
+views:
+  - title: Buddy
+    path: buddy
+    icon: mdi:panda
+    cards:
+      # 1) Stat-bar oben: Name + Level + XP
+      - type: horizontal-stack
+        cards:
+          - type: markdown
+            content: |
+              # {{ '🐾' }} Little Buddy
+              **Level** {{ states('input_number.little_buddy_level') }}
+              ·
+              **XP** {{ states('input_number.little_buddy_xp') }}
+
+      # 2) Die Little Buddy Card selbst (2x2 Tile)
+      - type: custom:little-buddy-card
+        name: "{{ states('input_text.buddy_nickname') or 'Buddy' }}"
+        asset_ext: png
+        mood: input_select.little_buddy_mood
+        xp: input_number.little_buddy_xp
+        level: input_number.little_buddy_level
+        health: input_number.little_buddy_health
+        hunger: input_number.little_buddy_hunger
+        energy: input_number.little_buddy_energy
+        happiness: input_number.little_buddy_happiness
+        tree_level: input_select.little_buddy_tree_level
+        xp_per_click: input_number.little_buddy_xp_per_click
+        grid_options:
+          columns: 6
+          rows: 3
+        tap_action:
+          action: perform-action
+          service: input_number.set_value
+          data:
+            entity_id: input_number.little_buddy_xp
+            value: >-
+              {{ (states('input_number.little_buddy_xp') | float(0)) + (states('input_number.little_buddy_xp_per_click') | float(10)) }}
+
+      # 3) Mushroom-Stats: Health / Hunger / Energy / Happiness
+      - type: glance
+        title: Status
+        entities:
+          - entity: input_number.little_buddy_health
+            name: Health
+          - entity: input_number.little_buddy_hunger
+            name: Hunger
+          - entity: input_number.little_buddy_energy
+            name: Energy
+          - entity: input_number.little_buddy_happiness
+            name: Happy
+        show_state: true
+        show_name: true
+
+      # 4) Mood-Buttons (Mushroom template-card pro Mood)
+      - type: grid
+        columns: 4
+        square: false
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Happy
+            icon: mdi:emoticon-happy
+            tap_action:
+              action: perform-action
+              service: input_select.select_option
+              data:
+                entity_id: input_select.little_buddy_mood
+                option: happy
+          - type: custom:mushroom-template-card
+            primary: Sad
+            icon: mdi:emoticon-sad
+            tap_action:
+              action: perform-action
+              service: input_select.select_option
+              data:
+                entity_id: input_select.little_buddy_mood
+                option: sad
+          - type: custom:mushroom-template-card
+            primary: Hungry
+            icon: mdi:food
+            tap_action:
+              action: perform-action
+              service: input_select.select_option
+              data:
+                entity_id: input_select.little_buddy_mood
+                option: hungry
+          - type: custom:mushroom-template-card
+            primary: Sleepy
+            icon: mdi:sleep
+            tap_action:
+              action: perform-action
+              service: input_select.select_option
+              data:
+                entity_id: input_select.little_buddy_mood
+                option: sleepy
+
+      # 5) Feed-Button
+      - type: custom:mushroom-template-card
+        primary: Feed Buddy
+        secondary: "{{ states('input_number.little_buddy_hunger') }}% hungry"
+        icon: mdi:food-apple
+        tap_action:
+          action: perform-action
+          service: input_button.press
+          data:
+            entity_id: input_button.little_buddy_feed

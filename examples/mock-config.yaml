@@ -1,0 +1,48 @@
+# Little Buddy Card — Beispiel-Config
+#
+# PURPOSE: 1:1 in den Card-Editor pasten ("Show Code Editor" im Card-Picker
+# öffnen, diesen YAML reinschmeißen, Save). Verwendet die Standard-Entity-IDs
+# aus examples/package/little_buddy_helpers.yaml — wenn du die Helpers
+# importiert hast, läuft die Karte sofort.
+#
+# CUSTOMIZE: Passe entity-IDs an deine echten HA-Entities an, ändere den
+# Namen, füge eigene Mood-Triggers hinzu.
+
+type: custom:little-buddy-card
+name: "{{ states('input_text.buddy_nickname') or 'Buddy' }}"
+asset_ext: png  # dev-default. Später: gif
+mood: input_select.little_buddy_mood
+xp: input_number.little_buddy_xp
+level: input_number.little_buddy_level
+health: input_number.little_buddy_health
+hunger: input_number.little_buddy_hunger
+energy: input_number.little_buddy_energy
+happiness: input_number.little_buddy_happiness
+tree_level: input_select.little_buddy_tree_level
+xp_per_click: input_number.little_buddy_xp_per_click
+
+# Optional: XP bei Tap-Aktion auf einen Service umleiten.
+# Default: inkrementiert die XP-Entity oben. Komplett auskommentieren, um
+# den Default zu nutzen.
+tap_action:
+  action: perform-action
+  service: input_number.set_value
+  data:
+    entity_id: input_number.little_buddy_xp
+    value: >-
+      {{ (states('input_number.little_buddy_xp') | float(0)) + (states('input_number.little_buddy_xp_per_click') | float(10)) }}
+
+# Optional: andere Entitäten steuern die Stimmung (gewinnt vor `mood`).
+moods:
+  - mood: hungry
+    entity: input_number.little_buddy_hunger
+    state: ">70"
+  - mood: sleepy
+    entity: input_number.little_buddy_energy
+    state: "<20"
+  - mood: happy
+    entity: input_number.little_buddy_happiness
+    state: ">80"
+  - mood: sad
+    entity: input_number.little_buddy_health
+    state: "<30"

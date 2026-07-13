@@ -1,6 +1,6 @@
 {
   "name": "Little Buddy Card",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "domain": "little_buddy_card",
   "description": "A gamified Lovelace card with growable pixel-art pets and trees \u2014 track XP, levels, mood, and learning progress.",
   "bugs": [

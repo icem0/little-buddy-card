@@ -1,0 +1,130 @@
+# Little Buddy Card — HA Input Helpers
+#
+# PURPOSE: Drop this file into `/config/packages/` (or include it from your
+# existing packages config) to create the input_helpers the card expects.
+# All entity ids match the `getStubConfig()` defaults in the card, so a
+# freshly dropped card on a fresh dashboard immediately renders.
+#
+# INSTALL:
+#   1. In your HA configuration.yaml, add:   `homeassistant.packages: !include_dir_named packages`
+#   2. Save this file as:  /config/packages/little_buddy_helpers.yaml
+#   3. Developer Tools > YAML > Reload all YAML files (or restart HA)
+#
+# CUSTOMIZE: rename entities by adding `object_id:` per input_* if you want
+# different names. The card config has to match the renamed entity ids.
+
+input_number:
+  little_buddy_xp:
+    name: "Little Buddy XP"
+    min: 0
+    max: 999999
+    step: 1
+    initial: 0
+    mode: box
+    unit_of_measurement: "XP"
+    icon: mdi:star-four-points
+
+  little_buddy_level:
+    name: "Little Buddy Level"
+    min: 1
+    max: 5
+    step: 1
+    initial: 1
+    mode: box
+    unit_of_measurement: "Lvl"
+    icon: mdi:trophy
+
+  little_buddy_health:
+    name: "Little Buddy Health"
+    min: 0
+    max: 100
+    step: 1
+    initial: 100
+    mode: slider
+    unit_of_measurement: "%"
+    icon: mdi:heart
+
+  little_buddy_hunger:
+    name: "Little Buddy Hunger"
+    min: 0
+    max: 100
+    step: 1
+    initial: 50
+    mode: slider
+    unit_of_measurement: "%"
+    icon: mdi:food
+
+  little_buddy_energy:
+    name: "Little Buddy Energy"
+    min: 0
+    max: 100
+    step: 1
+    initial: 100
+    mode: slider
+    unit_of_measurement: "%"
+    icon: mdi:battery
+
+  little_buddy_happiness:
+    name: "Little Buddy Happiness"
+    min: 0
+    max: 100
+    step: 1
+    initial: 80
+    mode: slider
+    unit_of_measurement: "%"
+    icon: mdi:emoticon
+
+  little_buddy_xp_per_click:
+    name: "Little Buddy XP per click"
+    min: 1
+    max: 1000
+    step: 1
+    initial: 10
+    mode: box
+    unit_of_measurement: "XP"
+    icon: mdi:cursor-default-click
+
+input_select:
+  little_buddy_mood:
+    name: "Little Buddy Mood"
+    options:
+      - happy
+      - sad
+      - hungry
+      - thirsty
+      - sleepy
+      - angry
+      - playful
+    initial: happy
+    icon: mdi:emoticon-happy
+
+  little_buddy_tree_level:
+    name: "Little Buddy Tree Level"
+    options:
+      - seed
+      - sprout
+      - sapling
+      - young_tree
+      - full_grown
+    initial: seed
+    icon: mdi:tree
+
+# Optional: button to "feed" the buddy (drops hunger by 30, min 0).
+automation:
+  - id: little_buddy_feed
+    alias: "Little Buddy: Feed"
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: input_button.little_buddy_feed
+    action:
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.little_buddy_hunger
+          value: >-
+            {{ max(0, states('input_number.little_buddy_hunger') | float - 30) }}
+
+input_button:
+  little_buddy_feed:
+    name: "Feed Little Buddy"
+    icon: mdi:food-apple
