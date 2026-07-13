@@ -1,0 +1,26 @@
+=== katharina_train_lora_v1 (Character-LoRA-Training) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+Dataset: /root/little-buddy-card/assets/training/katharina_char_v1/images
+LoRA-Output: loras/katharina_char_lora_v1.safetensors
+
+Hyperparameter:
+  Rank:        16
+  Alpha:       16
+  Learning rate: 0.0001
+  Steps:       1500
+  Batch size:  1
+  Grad accum:  1
+  Optimizer:   AdamW8bit
+  Erwartete Dauer: ~15 min auf RTX 4090
+
+Dataset-Check:
+  Bilder:  9
+  Captions: 9
+
+Workflow gebaut: 5 Nodes
+
+=== STARTE TRAINING ===
+Prompt ID: ef3e6566-7aa3-47f7-8d28-831de49aa8d7
+Warte auf Completion (timeout 30 min)...
+  [0s] Training läuft...
+⚠ Training returned without outputs (cache hit or empty)

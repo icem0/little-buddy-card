@@ -1,6 +1,6 @@
 {
   "name": "Little Buddy Card",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "domain": "little_buddy_card",
   "codeowners": ["@icem0"],
   "documentation": "https://github.com/icem0/little-buddy-card",

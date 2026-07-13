@@ -10,8 +10,13 @@ jobs:
       - name: HACS Action
         uses: hacs/action@main
         with:
-          # HACS GH-Action only accepts a small set: integration, appdaemon,
-          # python_script, template, theme. Our manifest declares
-          # integration_type: lovelace, which the action will validate against
-          # the integration schema (HacsCategory.INTEGRATION).
-          category: 'integration'
+          # HACS 2026-summer: register the card as a 'plugin' (frontend
+          # resource) so HACS auto-adds /hacsfiles/<repo>/<file>.js to
+          # the dashboard resources. This is what makes the card
+          # appear in the "+ Add Card" picker.
+          #
+          # The repo also carries a custom_components/little_buddy_card/
+          # tree (for HACS-Validate integration checks), but HACS
+          # downloads only the single .js file (dist/little-buddy-card.js)
+          # for runtime use.
+          category: 'plugin'

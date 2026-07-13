@@ -29,8 +29,8 @@ PROMPT = (
     "masterpiece, best quality, amazing quality, "
     # === Charakter ===
     "pixel art, cute childlike small girl, "
-    "blonde hair in two long braids, "
-    "(bright crimson red dress:1.4), (knee-length dress:1.2), white peter pan collar, "
+    "(blonde_braids:1.3), "
+    "(bright crimson red dress:1.4), (long_dress:1.2), white peter pan collar, "
     "short puffy sleeves, white knee-high socks, black mary jane shoes, "
     "big round innocent eyes, plump cheeks, sweet innocent smile, "
     "(chibi proportions:1.1), large round head, tiny limbs, "
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
     sid = get_session()
     print(f"Session: {sid[:16]}...")
-    out = f"{OUT_DIR}/master_v10_pony_scores.png"
+    out = f"{OUT_DIR}/master_v14_800.png"
     print(f"\n[v10_pony_scores] cfg=7.0, steps=30, seed=42")
     try:
         size = gen(sid, PROMPT, NEG, 7.0, 30, 800, 800, 42, out)
