@@ -10,4 +10,8 @@ jobs:
       - name: HACS Action
         uses: hacs/action@main
         with:
-          category: 'lovelace'   # Lovelace card, not Plugin
+          # HACS GH-Action only accepts a small set: integration, appdaemon,
+          # python_script, template, theme. Our manifest declares
+          # integration_type: lovelace, which the action will validate against
+          # the integration schema (HacsCategory.INTEGRATION).
+          category: 'integration'
