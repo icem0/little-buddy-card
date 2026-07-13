@@ -1,0 +1,57 @@
+=== katharina_variations_loop_v2 (img2img vom echten Master) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+Master: /root/little-buddy-card/assets/temp/katharina_master.png (72 KB)
+Method: SwarmUI img2img mit initimage + creativity 0.4
+Resolution: 512×512 (Master native), Steps: 28, Cfg: 7.5
+KEIN CharTurn-LoRA, KEIN Pixel_Art_XL LoRA (minimal)
+Seeds: [100, 101, 102, 103, 104, 105, 106, 107]
+Output: /root/little-buddy-card/assets/characters/katharina/variations_v2/
+
+Katharina-Specs:
+  - standing straight, both feet planted, both arms at sides (EXPLIZIT)
+  - simple red dress, white collar, puffy short sleeves
+  - blonde braids, white socks, black mary janes
+  - cute chibi kawaii girl, childlike proportions
+  - kein Folklore, kein NSFW, kein Sexy
+
+Master base64: 98328 chars
+Session: f9ea4ee988c98362...
+
+[1/8] seed 100
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_01_seed100.png (239 KB)
+
+[2/8] seed 101
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_02_seed101.png (241 KB)
+
+[3/8] seed 102
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_03_seed102.png (237 KB)
+
+[4/8] seed 103
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_04_seed103.png (250 KB)
+
+[5/8] seed 104
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_05_seed104.png (253 KB)
+
+[6/8] seed 105
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_06_seed105.png (251 KB)
+
+[7/8] seed 106
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_07_seed106.png (262 KB)
+
+[8/8] seed 107
+  ✓ /root/little-buddy-card/assets/characters/katharina/variations_v2/var_08_seed107.png (257 KB)
+
+=== FERTIG ===
+Output: /root/little-buddy-card/assets/characters/katharina/variations_v2/
+  var_01_seed100.png: 239 KB
+  var_02_seed101.png: 241 KB
+  var_03_seed102.png: 237 KB
+  var_04_seed103.png: 250 KB
+  var_05_seed104.png: 253 KB
+  var_06_seed105.png: 251 KB
+  var_07_seed106.png: 262 KB
+  var_08_seed107.png: 257 KB
+
+USER-BEWERTUNG ERWARTET:
+  Welche 2-3 sehen am meisten nach Katharina aus?
+  Sag die Nummern — die werden Trainings-Set fürs Character-LoRA.
