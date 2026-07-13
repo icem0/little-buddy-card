@@ -2,10 +2,10 @@
   "name": "little-buddy-card",
   "version": "0.8.7",
   "description": "Gamified Home Assistant Lovelace card with pixel pets and trees",
-  "main": "dist/little-buddy-card.js",
+  "main": "little-buddy-card.js",
   "scripts": {
     "build": "rollup -c",
-    "postbuild": "mkdir -p dist && cp custom_components/little_buddy_card/dist/little-buddy-card.js dist/little-buddy-card.js && python3 scripts/build_release_zip.py",
+    "postbuild": "cp custom_components/little_buddy_card/dist/little-buddy-card.js little-buddy-card.js && python3 scripts/build_release_zip.py",
     "watch": "rollup -c -w",
     "release": "bash scripts/release.sh",
     "typecheck": "tsc --noEmit",

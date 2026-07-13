@@ -1,0 +1,62 @@
+=== katharina_dataset_v3 (CharTurn-LoRA dreht Katharina) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+LoRA: pony\character\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors
+LoRA weight: 0.7
+12 verschiedene Winkel via CharTurn-Trigger
+
+CharTurn-Trigger im Prompt:
+  turnaround sheet, character design sheet, multiple views, model sheet reference
+
+Session: 5672b1fe6f351152...
+
+[1/12] 02_front (seed 100)
+  View: single character facing forward, front view, looking at viewer
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[2/12] 03_3quarter_r (seed 107)
+  View: single character in 3/4 view from the right, head turned right
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[3/12] 04_3quarter_l (seed 114)
+  View: single character in 3/4 view from the left, head turned left
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[4/12] 05_side_r (seed 121)
+  View: single character in side view from the right, profile
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[5/12] 06_side_l (seed 128)
+  View: single character in side view from the left, profile
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[6/12] 07_back_3q (seed 135)
+  View: single character in 3/4 view from behind, slight head turn
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[7/12] 08_back (seed 142)
+  View: single character back view, facing away, back of braids visible
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[8/12] 09_top_down (seed 149)
+  View: single character from above, high angle, top-down view
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[9/12] 10_low_angle (seed 156)
+  View: single character from below, low angle, looking up
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[10/12] 11_4q_dynamic (seed 163)
+  View: single character, dynamic 3/4 pose with slight movement
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[11/12] 12_leaning (seed 170)
+  View: single character in 3/4 view, slight body lean to the right
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+[12/12] 13_full_body (seed 177)
+  View: single character, full body turnaround, all proportions visible
+  ✗ No images: {'error': "Invalid value for parameter LoRAs: Invalid value for param LoRAs - 'pony\\character\\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors' - option does not exist. Has it been deleted?"}
+
+=== FERTIG ===
+  Bilder:  1
+  Captions: 1

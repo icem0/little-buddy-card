@@ -1,0 +1,70 @@
+=== katharina_dataset_v3 (CharTurn-LoRA via ComfyUI pass-through) ===
+Base: RDXL_Pixel_Art_-_Pony_2.safetensors
+LoRA: pony\character\Pony_CharTurn-_Multi-View-_Turnaround-_Model_Sheet-_Character_Design_-_Dim32Alpha16_Prodigy_Mod.safetensors (weight 0.7)
+Resolution: 1024x1024, Steps 28, Cfg 7.5
+12 verschiedene Winkel via CharTurn-Trigger
+
+
+[1/12] 02_front (seed 100)
+  View: single character facing forward, front view, looking at viewer
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/02_front.png (674 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/02_front.txt
+
+[2/12] 03_3quarter_r (seed 107)
+  View: single character in 3/4 view from the right, head turned right
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/03_3quarter_r.png (766 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/03_3quarter_r.txt
+
+[3/12] 04_3quarter_l (seed 114)
+  View: single character in 3/4 view from the left, head turned left
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/04_3quarter_l.png (837 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/04_3quarter_l.txt
+
+[4/12] 05_side_r (seed 121)
+  View: single character in side view from the right, profile
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/05_side_r.png (801 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/05_side_r.txt
+
+[5/12] 06_side_l (seed 128)
+  View: single character in side view from the left, profile
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/06_side_l.png (748 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/06_side_l.txt
+
+[6/12] 07_back_3q (seed 135)
+  View: single character in 3/4 view from behind, slight head turn
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/07_back_3q.png (823 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/07_back_3q.txt
+
+[7/12] 08_back (seed 142)
+  View: single character back view, facing away, back of braids visible
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/08_back.png (611 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/08_back.txt
+
+[8/12] 09_top_down (seed 149)
+  View: single character from above, high angle, top-down view
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/09_top_down.png (807 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/09_top_down.txt
+
+[9/12] 10_low_angle (seed 156)
+  View: single character from below, low angle, looking up
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/10_low_angle.png (746 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/10_low_angle.txt
+
+[10/12] 11_4q_dynamic (seed 163)
+  View: single character, dynamic 3/4 pose with slight movement
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/11_4q_dynamic.png (812 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/11_4q_dynamic.txt
+
+[11/12] 12_leaning (seed 170)
+  View: single character in 3/4 view, slight body lean to the right
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/12_leaning.png (760 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/12_leaning.txt
+
+[12/12] 13_full_body (seed 177)
+  View: single character, full body turnaround, all proportions visible
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/13_full_body.png (814 KB)
+  ✓ /root/little-buddy-card/assets/training/katharina_char_v1/images/13_full_body.txt
+
+=== FERTIG ===
+  Bilder:  13
+  Captions: 13
