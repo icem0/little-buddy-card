@@ -1,0 +1,113 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "RDXL_Pixel_Art_-_Pony_2.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ],
+      "lora_name": "littlebuddy_pixel_00001_.safetensors",
+      "strength_model": 0.8,
+      "strength_clip": 0.8
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "katharina_ref (1).png"
+    }
+  },
+  "4": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "pixel art, katharina character, cute chibi kawaii girl, blonde hair in two long braids, simple red polka-dotted dress, white socks, black mary jane shoes, big round innocent eyes, sweet innocent, white background, masterpiece, three-quarter view, gentle hop, both feet barely off ground",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "muted, blurry, deformed, holding object, book, picture, frame, paper, pinafore, school uniform, collar, puffy sleeves, multiple girls, adult, wings, halo, tail, animal ears, fantasy, white dress, blue dress, bun, ponytail, short hair, black/brown/blue/pink hair",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "4",
+        0
+      ],
+      "seed": 42,
+      "steps": 28,
+      "cfg": 7.5,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "denoise": 0.4
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "katharina_consistent"
+    }
+  }
+}
