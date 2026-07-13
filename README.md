@@ -1,5 +1,7 @@
 # Little Buddy Card 🌱🐾
 
+![Little Buddy Card preview](assets/characters/katharina/master/katharina_master.png)
+
 A **gamified Lovelace card** for [Home Assistant](https://www.home-assistant.io/) with growable pixel-art pets and trees. Track XP, levels, mood, learning progress, and more — directly on your dashboard.
 
 ## ✨ Features
