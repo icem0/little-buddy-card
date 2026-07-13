@@ -88,13 +88,43 @@ if [[ "$version" == "0.0.0" ]]; then
   err "manifest version still 0.0.0 — did you forget to bump?"
 fi
 
-# 5. GitHub release (informational)
+# 5. hacs.json vs. manifest consistency
 echo
-echo "[4] GitHub release (informational)"
+echo "[4] HACS manifest consistency"
+hacs_filename=$(python3 -c "import json;print(json.load(open('hacs.json'))['filename'])" 2>/dev/null || echo "")
+hacs_zip=$(python3 -c "import json;print(json.load(open('hacs.json')).get('zip_release',False))" 2>/dev/null || echo "False")
+if [[ -n "$hacs_filename" ]]; then
+  ok "hacs.json filename: $hacs_filename"
+  if [[ "$hacs_zip" == "True" ]]; then
+    if [[ "$hacs_filename" == *.zip ]]; then
+      ok "hacs.json: zip_release=true + filename ends .zip — HACS will use ZIP download path"
+      if [[ -s "dist/$hacs_filename" ]]; then
+        ok "dist/$hacs_filename exists ($(stat -c%s "dist/$hacs_filename") bytes)"
+      else
+        err "dist/$hacs_filename missing — run: npm run zip"
+      fi
+    else
+      err "hacs.json: zip_release=true but filename '$hacs_filename' does not end in .zip"
+    fi
+  fi
+else
+  err "hacs.json missing 'filename'"
+fi
+
+# 6. GitHub release (informational)
+echo
+echo "[5] GitHub release (informational)"
 release_json=$(curl -sS --max-time 8 "https://api.github.com/repos/icem0/little-buddy-card/releases/tags/v${version}" 2>/dev/null || true)
 if echo "$release_json" | python3 -c "import sys,json;d=json.load(sys.stdin);sys.exit(0 if d.get('id') else 1)" 2>/dev/null; then
-  asset=$(echo "$release_json" | python3 -c "import sys,json;d=json.load(sys.stdin);print((d.get('assets') or [{}])[0].get('name','(no asset)'))")
-  ok "v${version} release live, asset: $asset"
+  asset_names=$(echo "$release_json" | python3 -c "import sys,json;d=json.load(sys.stdin);print(' '.join(a['name'] for a in d.get('assets',[])))")
+  ok "v${version} release live, assets: $asset_names"
+  if [[ "$hacs_zip" == "True" && "$hacs_filename" != "" ]]; then
+    if echo " $asset_names " | grep -q " $hacs_filename "; then
+      ok "ZIP asset '$hacs_filename' is attached to release"
+    else
+      err "Release v${version} is missing the ZIP asset '$hacs_filename' that hacs.json points to"
+    fi
+  fi
 else
   warn "v${version} release not found on GitHub — HACS users won't see an update"
 fi

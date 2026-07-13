@@ -30,9 +30,9 @@ jobs:
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/little-buddy-card.js
-            dist/little-buddy-card.zip
+          # The only HACS-relevant asset is the ZIP. The .js lives inside it.
+          # This is what hacs.json 'filename' + 'zip_release: true' point at.
+          files: dist/little-buddy-card.zip
           generate_release_notes: true
           make_latest: true
         env:

@@ -1,6 +1,7 @@
 {
   "name": "Little Buddy Card",
   "render_readme": true,
-  "filename": "little-buddy-card.js",
-  "content_in_root": true
+  "filename": "little-buddy-card.zip",
+  "zip_release": true,
+  "content_in_root": false
 }
