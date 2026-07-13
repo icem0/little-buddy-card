@@ -1,4 +1,4 @@
-name: CI - Build & Lint
+name: CI - Build & Typecheck
 
 on: [push, pull_request]
 
@@ -11,5 +11,11 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - run: npm run lint
+      - run: npm run typecheck
       - run: npm run build
+      - run: npm run zip
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: little-buddy-card
+          path: dist/little-buddy-card.zip

@@ -7,7 +7,10 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "release": "bash scripts/release.sh",
-    "lint": "eslint src/**/*.ts"
+    "typecheck": "tsc --noEmit",
+    "verify": "bash scripts/verify.sh",
+    "deploy": "bash scripts/deploy.sh",
+    "zip": "python3 scripts/build_release_zip.py"
   },
   "dependencies": {
     "lit": "^3.1.0"

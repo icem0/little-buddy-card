@@ -10,4 +10,4 @@ jobs:
       - name: HACS Action
         uses: hacs/action@main
         with:
-          category: 'plugin'
+          category: 'lovelace'   # Lovelace card, not Plugin

@@ -24,10 +24,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Build release ZIP (bundle + assets)
+        run: npm run zip
+
       - name: Create or update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/little-buddy-card.js
+          files: |
+            dist/little-buddy-card.js
+            dist/little-buddy-card.zip
           generate_release_notes: true
           make_latest: true
         env:
