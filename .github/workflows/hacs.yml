@@ -10,13 +10,9 @@ jobs:
       - name: HACS Action
         uses: hacs/action@main
         with:
-          # HACS 2026-summer: register the card as a 'plugin' (frontend
-          # resource) so HACS auto-adds /hacsfiles/<repo>/<file>.js to
-          # the dashboard resources. This is what makes the card
-          # appear in the "+ Add Card" picker.
-          #
-          # The repo also carries a custom_components/little_buddy_card/
-          # tree (for HACS-Validate integration checks), but HACS
-          # downloads only the single .js file (dist/little-buddy-card.js)
-          # for runtime use.
-          category: 'plugin'
+          # v0.9.5+: HACS-Integration-Category for native HA Updates panel.
+          # The bundle lives at custom_components/little_buddy_card/frontend/
+          # and is served by HA at /local/little_buddy_card/. The user adds
+          # this as a Lovelace resource manually (HACS-Integration does
+          # NOT auto-register Lovelace resources like HACS-Plugin does).
+          category: 'integration'
