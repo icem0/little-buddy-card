@@ -34,9 +34,19 @@ def main():
         # Bundle at top level (wget+unzip gives the .js without prefix).
         zf.write(BUNDLE, arcname="little-buddy-card.js")
         written += 1
-        # 40 sprites flat under assets/ (matches /local/little-buddy-card/).
+        # 40 mood/tree placeholders flat under assets/ (matches /local/little-buddy-card/).
         for sub in ("pets", "trees"):
             for dirpath, _, files in os.walk(os.path.join(ASSETS, sub)):
+                for f in files:
+                    src = os.path.join(dirpath, f)
+                    arc = os.path.relpath(src, ASSETS)
+                    zf.write(src, arcname=f"assets/{arc}")
+                    written += 1
+        # NEW: post-processed LoRA species sprites (transparent, indexed, 128px)
+        # under assets/release/ — ready for engine integration as a sprite sheet / set.
+        release_dir = os.path.join(ASSETS, "release")
+        if os.path.isdir(release_dir):
+            for dirpath, _, files in os.walk(release_dir):
                 for f in files:
                     src = os.path.join(dirpath, f)
                     arc = os.path.relpath(src, ASSETS)

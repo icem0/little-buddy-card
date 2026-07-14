@@ -1,0 +1,817 @@
+{
+  "meta": {
+    "source": "assets/sprites/* (LoRA littlebuddy_pixel_00001_ @0.8)",
+    "native_size": 64,
+    "output_size": 128,
+    "key_tolerance": 60,
+    "upscale": "nearest-neighbor 64->128",
+    "palette": {
+      "mode": "global-shared",
+      "distinct_creature_colors": 31815,
+      "palette_size": 256,
+      "method": "median-cut-256"
+    }
+  },
+  "sprites": {
+    "pet_01.png": {
+      "index": 1,
+      "species": "cat",
+      "palette": "warm orange and cream",
+      "pose": "standing, idle pose, both feet planted, neutral expression",
+      "seed": 1289247914,
+      "prompt_id": "f7e4d121-ed87-42e0-889e-cfdbaf815aa2",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_01.png",
+      "creature_area_frac": 0.1721,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_02.png": {
+      "index": 2,
+      "species": "dog",
+      "palette": "cool blue and white",
+      "pose": "happy expression, small smile, slight bounce",
+      "seed": 921340243,
+      "prompt_id": "4bb67cf5-4a70-4440-abcd-b98c97de2ac2",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_02.png",
+      "creature_area_frac": 0.4075,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_03.png": {
+      "index": 3,
+      "species": "fox",
+      "palette": "mint green and pink",
+      "pose": "sad expression, head tilted down",
+      "seed": 152669930,
+      "prompt_id": "7f80c6b0-609a-4c0f-8810-addf40029041",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_03.png",
+      "creature_area_frac": 0.2849,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_04.png": {
+      "index": 4,
+      "species": "rabbit",
+      "palette": "lavender and gold",
+      "pose": "angry expression, slight stomp",
+      "seed": 1101266324,
+      "prompt_id": "8633845e-a223-4550-aa25-2cbca86e9ad9",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_04.png",
+      "creature_area_frac": 0.2363,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_05.png": {
+      "index": 5,
+      "species": "bear",
+      "palette": "red and black",
+      "pose": "sleepy expression, eyes half closed, slight sway",
+      "seed": 902543838,
+      "prompt_id": "fb74c2e4-a31a-4937-b845-204ca761d2b1",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_05.png",
+      "creature_area_frac": 0.3203,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_06.png": {
+      "index": 6,
+      "species": "dragon",
+      "palette": "teal and yellow",
+      "pose": "thirsty expression, looking up, tongue slightly out",
+      "seed": 1933497795,
+      "prompt_id": "486c0f55-987e-4c94-9b54-836579e5ed82",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_06.png",
+      "creature_area_frac": 0.2905,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_07.png": {
+      "index": 7,
+      "species": "wolf",
+      "palette": "purple and silver",
+      "pose": "hungry expression, looking at viewer, eager",
+      "seed": 410282861,
+      "prompt_id": "8ace8973-1a58-4428-86d0-78c919c7d22f",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_07.png",
+      "creature_area_frac": 0.2942,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_08.png": {
+      "index": 8,
+      "species": "tiger",
+      "palette": "peach and brown",
+      "pose": "playful expression, one paw up, wagging",
+      "seed": 815229228,
+      "prompt_id": "dcbd991b-6f05-418a-b7b4-345be38042a1",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_08.png",
+      "creature_area_frac": 0.1536,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_09.png": {
+      "index": 9,
+      "species": "panda",
+      "palette": "sky blue and coral",
+      "pose": "walking forward, one foot in front of the other, mid-step",
+      "seed": 1103085868,
+      "prompt_id": "194eb259-303d-4142-8c43-a11062f4ef95",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_09.png",
+      "creature_area_frac": 0.3674,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_10.png": {
+      "index": 10,
+      "species": "owl",
+      "palette": "forest green and tan",
+      "pose": "sitting pose, weight on haunches",
+      "seed": 543181896,
+      "prompt_id": "974e4d16-f5a6-4302-b3b8-818bea6dffc4",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_10.png",
+      "creature_area_frac": 0.2981,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_11.png": {
+      "index": 11,
+      "species": "frog",
+      "palette": "rose and ivory",
+      "pose": "standing, idle pose, both feet planted, neutral expression",
+      "seed": 2095721687,
+      "prompt_id": "3fa5fff2-7ef3-45cf-b921-dbd5b49a00c2",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_11.png",
+      "creature_area_frac": 0.1665,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_12.png": {
+      "index": 12,
+      "species": "hamster",
+      "palette": "navy and cyan",
+      "pose": "happy expression, small smile, slight bounce",
+      "seed": 1901728535,
+      "prompt_id": "5db52f14-022d-4ed5-a7b2-b98608386701",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_12.png",
+      "creature_area_frac": 0.2905,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_13.png": {
+      "index": 13,
+      "species": "penguin",
+      "palette": "maroon and beige",
+      "pose": "sad expression, head tilted down",
+      "seed": 448927900,
+      "prompt_id": "58f0ca0b-c85a-47be-8954-899b7f903ab1",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_13.png",
+      "creature_area_frac": 0.3572,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_14.png": {
+      "index": 14,
+      "species": "chick",
+      "palette": "lime and violet",
+      "pose": "angry expression, slight stomp",
+      "seed": 838929177,
+      "prompt_id": "5015c152-19ab-4021-8ed3-588853fe7184",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_14.png",
+      "creature_area_frac": 0.1411,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_15.png": {
+      "index": 15,
+      "species": "deer",
+      "palette": "coral and mint",
+      "pose": "sleepy expression, eyes half closed, slight sway",
+      "seed": 1185136484,
+      "prompt_id": "e4e21a8f-c737-4362-b7f6-b86c8b557094",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_15.png",
+      "creature_area_frac": 0.3228,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_16.png": {
+      "index": 16,
+      "species": "raccoon",
+      "palette": "indigo and peach",
+      "pose": "thirsty expression, looking up, tongue slightly out",
+      "seed": 114052362,
+      "prompt_id": "c51d8514-04b2-4b48-9e46-5d2b41f62312",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_16.png",
+      "creature_area_frac": 0.3105,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_17.png": {
+      "index": 17,
+      "species": "hedgehog",
+      "palette": "charcoal and amber",
+      "pose": "hungry expression, looking at viewer, eager",
+      "seed": 1206733388,
+      "prompt_id": "122da12f-1cdf-4795-9ac9-846523aa26ba",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_17.png",
+      "creature_area_frac": 0.4114,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_18.png": {
+      "index": 18,
+      "species": "lion",
+      "palette": "pink and slate",
+      "pose": "playful expression, one paw up, wagging",
+      "seed": 1791031843,
+      "prompt_id": "61fd3e4f-fb0e-45f2-b859-b6b9e6d054e7",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_18.png",
+      "creature_area_frac": 0.2102,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_19.png": {
+      "index": 19,
+      "species": "monkey",
+      "palette": "emerald and cream",
+      "pose": "walking forward, one foot in front of the other, mid-step",
+      "seed": 1811155932,
+      "prompt_id": "a7a912bf-a408-4c13-bc67-2b9491a5cdd3",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_19.png",
+      "creature_area_frac": 0.259,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_20.png": {
+      "index": 20,
+      "species": "pig",
+      "palette": "royal blue and gold",
+      "pose": "sitting pose, weight on haunches",
+      "seed": 1932147479,
+      "prompt_id": "2b9d0ca9-0361-4bac-8d37-2b12b997dade",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_20.png",
+      "creature_area_frac": 0.2659,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_21.png": {
+      "index": 21,
+      "species": "cow",
+      "palette": "cherry and white",
+      "pose": "standing, idle pose, both feet planted, neutral expression",
+      "seed": 757061194,
+      "prompt_id": "dcf9f83b-35c6-4df5-9d12-6b589e6f6bed",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_21.png",
+      "creature_area_frac": 0.3083,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_22.png": {
+      "index": 22,
+      "species": "horse",
+      "palette": "olive and rust",
+      "pose": "happy expression, small smile, slight bounce",
+      "seed": 818593242,
+      "prompt_id": "64f97d71-94dc-42e5-83ce-989416fde36c",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_22.png",
+      "creature_area_frac": 0.3086,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_23.png": {
+      "index": 23,
+      "species": "seal",
+      "palette": "periwinkle and rose",
+      "pose": "sad expression, head tilted down",
+      "seed": 2025687584,
+      "prompt_id": "2bf55718-7f83-441b-ba9f-9b11a371e4dd",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_23.png",
+      "creature_area_frac": 0.624,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_24.png": {
+      "index": 24,
+      "species": "turtle",
+      "palette": "sand and turquoise",
+      "pose": "angry expression, slight stomp",
+      "seed": 1886767386,
+      "prompt_id": "bbbc8fb5-d50a-4a9a-9d30-4af85b1f8e78",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_24.png",
+      "creature_area_frac": 0.1489,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_25.png": {
+      "index": 25,
+      "species": "bat",
+      "palette": "plum and sage",
+      "pose": "sleepy expression, eyes half closed, slight sway",
+      "seed": 1553669349,
+      "prompt_id": "403eb491-ce44-4e37-9a55-fc6326c7e82c",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_25.png",
+      "creature_area_frac": 0.207,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_26.png": {
+      "index": 26,
+      "species": "squid",
+      "palette": "cobalt and ivory",
+      "pose": "thirsty expression, looking up, tongue slightly out",
+      "seed": 48325705,
+      "prompt_id": "ff10b5bc-eb0e-4546-883d-fce75733c55b",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_26.png",
+      "creature_area_frac": 0.199,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_27.png": {
+      "index": 27,
+      "species": "sloth",
+      "palette": "brick and cream",
+      "pose": "hungry expression, looking at viewer, eager",
+      "seed": 515142177,
+      "prompt_id": "4b7633ef-de5f-4d2a-a6fc-f6948a46a4c3",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_27.png",
+      "creature_area_frac": 0.2856,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_28.png": {
+      "index": 28,
+      "species": "axolotl",
+      "palette": "seafoam and lilac",
+      "pose": "playful expression, one paw up, wagging",
+      "seed": 1147923412,
+      "prompt_id": "8a4c5d87-2640-4f9e-b6c6-6978d10e9a6b",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_28.png",
+      "creature_area_frac": 0.063,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_29.png": {
+      "index": 29,
+      "species": "chameleon",
+      "palette": "mahogany and gold",
+      "pose": "walking forward, one foot in front of the other, mid-step",
+      "seed": 84342244,
+      "prompt_id": "ad7a79b5-8d0f-4497-8d56-eb9feb25546d",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_29.png",
+      "creature_area_frac": 0.2366,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_30.png": {
+      "index": 30,
+      "species": "duck",
+      "palette": "steel and coral",
+      "pose": "sitting pose, weight on haunches",
+      "seed": 1786418860,
+      "prompt_id": "bd3b5422-420f-47df-aff9-0f8e473c7bcd",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_30.png",
+      "creature_area_frac": 0.2754,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_31.png": {
+      "index": 31,
+      "species": "mouse",
+      "palette": "honey and moss",
+      "pose": "standing, idle pose, both feet planted, neutral expression",
+      "seed": 1269550664,
+      "prompt_id": "f2319bbf-4d1f-4edf-8c6e-596a8fd0c976",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_31.png",
+      "creature_area_frac": 0.2158,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_32.png": {
+      "index": 32,
+      "species": "snake",
+      "palette": "dusty rose and teal",
+      "pose": "happy expression, small smile, slight bounce",
+      "seed": 1802425624,
+      "prompt_id": "32bb9ef8-e4a0-40eb-a090-468eae06617e",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_32.png",
+      "creature_area_frac": 0.2551,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_33.png": {
+      "index": 33,
+      "species": "crab",
+      "palette": "cream and cocoa",
+      "pose": "sad expression, head tilted down",
+      "seed": 1389311942,
+      "prompt_id": "05db06f0-3a9c-4cb5-8fbe-c645c9549ac9",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_33.png",
+      "creature_area_frac": 0.3337,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "pet_34.png": {
+      "index": 34,
+      "species": "octopus",
+      "palette": "sky and marigold",
+      "pose": "angry expression, slight stomp",
+      "seed": 9516320,
+      "prompt_id": "929c7b41-b01f-4f06-a82e-0b9119ece643",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_34.png",
+      "creature_area_frac": 0.0532,
+      "transparent_background": true,
+      "regen_needed": true
+    },
+    "pet_35.png": {
+      "index": 35,
+      "species": "koala",
+      "palette": "violet and mint",
+      "pose": "sleepy expression, eyes half closed, slight sway",
+      "seed": 1184182637,
+      "prompt_id": "94d64983-deab-4c59-a074-79b516e0699e",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/pets/pet_35.png",
+      "creature_area_frac": 0.2212,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "tree_01.png": {
+      "index": 1,
+      "shape": "round bushy tree, lush green canopy, thick brown trunk",
+      "palette": "forest green and tan",
+      "pose": "standing upright, centered, neutral",
+      "seed": 1449444169,
+      "prompt_id": "fe7e39ae-2f00-4bcf-8391-7e5548032c34",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/trees/tree_01.png",
+      "creature_area_frac": 0.25,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "tree_02.png": {
+      "index": 2,
+      "shape": "tall slender pine tree, dark green needles, conifer",
+      "palette": "emerald and cream",
+      "pose": "standing upright, centered, slight breeze",
+      "seed": 461764427,
+      "prompt_id": "5daa91a7-ecc9-45b6-b75e-1ac01880dff4",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/trees/tree_02.png",
+      "creature_area_frac": 0.2522,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "tree_03.png": {
+      "index": 3,
+      "shape": "autumn tree, orange and red leaves, small brown trunk",
+      "palette": "maroon and beige",
+      "pose": "standing upright, centered, full spread",
+      "seed": 914455639,
+      "prompt_id": "522b7150-887c-4832-a1c0-1bfe362ce862",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/trees/tree_03.png",
+      "creature_area_frac": 0.3613,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "tree_04.png": {
+      "index": 4,
+      "shape": "small bonsai sapling, light green leaves, tiny pot",
+      "palette": "mint green and pink",
+      "pose": "standing upright, centered, compact",
+      "seed": 1564924055,
+      "prompt_id": "09b31f53-c7f6-4442-8cf9-ec3546d152a2",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/trees/tree_04.png",
+      "creature_area_frac": 0.3235,
+      "transparent_background": true,
+      "regen_needed": false
+    },
+    "tree_05.png": {
+      "index": 5,
+      "shape": "blossom tree, pink flowers, soft green foliage, spring",
+      "palette": "rose and ivory",
+      "pose": "standing upright, centered, flowering",
+      "seed": 923882619,
+      "prompt_id": "c27036da-44c3-4587-9993-06b03a2d17c8",
+      "size": [
+        64,
+        64
+      ],
+      "output_size": [
+        128,
+        128
+      ],
+      "output_path": "assets/release/trees/tree_05.png",
+      "creature_area_frac": 0.3938,
+      "transparent_background": true,
+      "regen_needed": false
+    }
+  }
+}
