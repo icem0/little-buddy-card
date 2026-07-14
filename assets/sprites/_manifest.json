@@ -418,5 +418,65 @@
       64,
       64
     ]
+  },
+  "tree_01.png": {
+    "index": 1,
+    "shape": "round bushy tree, lush green canopy, thick brown trunk",
+    "palette": "forest green and tan",
+    "pose": "standing upright, centered, neutral",
+    "seed": 1449444169,
+    "prompt_id": "fe7e39ae-2f00-4bcf-8391-7e5548032c34",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "tree_02.png": {
+    "index": 2,
+    "shape": "tall slender pine tree, dark green needles, conifer",
+    "palette": "emerald and cream",
+    "pose": "standing upright, centered, slight breeze",
+    "seed": 461764427,
+    "prompt_id": "5daa91a7-ecc9-45b6-b75e-1ac01880dff4",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "tree_03.png": {
+    "index": 3,
+    "shape": "autumn tree, orange and red leaves, small brown trunk",
+    "palette": "maroon and beige",
+    "pose": "standing upright, centered, full spread",
+    "seed": 914455639,
+    "prompt_id": "522b7150-887c-4832-a1c0-1bfe362ce862",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "tree_04.png": {
+    "index": 4,
+    "shape": "small bonsai sapling, light green leaves, tiny pot",
+    "palette": "mint green and pink",
+    "pose": "standing upright, centered, compact",
+    "seed": 1564924055,
+    "prompt_id": "09b31f53-c7f6-4442-8cf9-ec3546d152a2",
+    "size": [
+      64,
+      64
+    ]
+  },
+  "tree_05.png": {
+    "index": 5,
+    "shape": "blossom tree, pink flowers, soft green foliage, spring",
+    "palette": "rose and ivory",
+    "pose": "standing upright, centered, flowering",
+    "seed": 923882619,
+    "prompt_id": "c27036da-44c3-4587-9993-06b03a2d17c8",
+    "size": [
+      64,
+      64
+    ]
   }
 }
