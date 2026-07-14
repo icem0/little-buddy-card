@@ -13,9 +13,8 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
-      - run: npm run zip
-      - name: Upload ZIP artifact
+      - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
         with:
           name: little-buddy-card
-          path: dist/little-buddy-card.zip
+          path: little-buddy-card.js
