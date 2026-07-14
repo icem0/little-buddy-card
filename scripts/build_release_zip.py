@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """
-Build a HACS release asset: dist/little-buddy-card.zip containing only the
-runtime payload (the bundle + the 40 placeholder sprites), nothing else.
+Build a HACS release asset: dist/little-buddy-card.zip containing the
+complete custom_components/ tree (manifest, frontend bundle, brand, __init__.py).
 
-The bundle now lives at the repo root (little-buddy-card.js) — HACS-Plugin
-downloads it from there into www/community/little-buddy-card/.
-
-This ZIP is a convenience/fallback for manual install, not required for the
-normal HACS-Plugin path (which uses the root .js directly).
+This ZIP is what HACS's "Download" button fetches when installing the
+Integration. HACS unpacks it into config/custom_components/little_buddy_card/.
 """
 import os
 import sys
@@ -16,11 +13,15 @@ import zipfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST = os.path.join(ROOT, "dist")
 OUT = os.path.join(DIST, "little-buddy-card.zip")
-BUNDLE = os.path.join(ROOT, "little-buddy-card.js")
-ASSETS = os.path.join(ROOT, "assets")
+CC = os.path.join(ROOT, "custom_components", "little_buddy_card")
+MANIFEST = os.path.join(CC, "manifest.json")
+BUNDLE = os.path.join(CC, "frontend", "little-buddy-card.js")
 
 
 def main():
+    if not os.path.exists(MANIFEST):
+        print(f"✗ {MANIFEST} missing")
+        return 1
     if not os.path.exists(BUNDLE):
         print(f"✗ {BUNDLE} missing — run: npm run build")
         return 1
@@ -31,27 +32,12 @@ def main():
 
     written = 0
     with zipfile.ZipFile(OUT, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
-        # Bundle at top level (wget+unzip gives the .js without prefix).
-        zf.write(BUNDLE, arcname="little-buddy-card.js")
-        written += 1
-        # 40 mood/tree placeholders flat under assets/ (matches /local/little-buddy-card/).
-        for sub in ("pets", "trees"):
-            for dirpath, _, files in os.walk(os.path.join(ASSETS, sub)):
-                for f in files:
-                    src = os.path.join(dirpath, f)
-                    arc = os.path.relpath(src, ASSETS)
-                    zf.write(src, arcname=f"assets/{arc}")
-                    written += 1
-        # NEW: post-processed LoRA species sprites (transparent, indexed, 128px)
-        # under assets/release/ — ready for engine integration as a sprite sheet / set.
-        release_dir = os.path.join(ASSETS, "release")
-        if os.path.isdir(release_dir):
-            for dirpath, _, files in os.walk(release_dir):
-                for f in files:
-                    src = os.path.join(dirpath, f)
-                    arc = os.path.relpath(src, ASSETS)
-                    zf.write(src, arcname=f"assets/{arc}")
-                    written += 1
+        for dirpath, _, files in os.walk(CC):
+            for f in files:
+                src = os.path.join(dirpath, f)
+                arc = os.path.relpath(src, ROOT)
+                zf.write(src, arcname=arc)
+                written += 1
 
     size = os.path.getsize(OUT)
     print(f"✅ {OUT}")
