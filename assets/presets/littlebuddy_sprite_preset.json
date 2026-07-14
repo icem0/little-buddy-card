@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "name": "Little Buddy Sprite Preset",
+    "task": "t_99cd9b1a",
+    "created": "2026-07-14",
+    "model": "RDXL_Pixel_Art_-_Pony_2.safetensors",
+    "lora": "littlebuddy_pixel_00001_.safetensors",
+    "lora_note": "ComfyUI-Direct name (suffixed with _00001_). SwarmUI's WebAPI /API/GenerateText2Image LoRAs[] index does NOT know this LoRA (documented index-mismatch). ALWAYS load via ComfyUI LoraLoader node, never via SwarmUI WebAPI LoRAs[].",
+    "trigger": "littlebuddy",
+    "character_type": "32x32 chibi creature (NOT a girl/character — old 'katharina character' triggers are wrong for this LoRA)"
+  },
+  "swarmui": {
+    "host": "http://192.168.178.53:7801",
+    "base_model": "RDXL_Pixel_Art_-_Pony_2.safetensors",
+    "loras": ["littlebuddy_pixel_00001_.safetensors"],
+    "lora_weights": [0.8],
+    "lora_tenc_weights": [0.8]
+  },
+  "generation": {
+    "sampler": "euler_ancestral",
+    "steps": 28,
+    "cfgscale": 7.5,
+    "generate_resolution": 512,
+    "sprite_target_resolution": 64,
+    "no_smoothing": true,
+    "post_process": "nearest_neighbor_downscale_to_64 (post-gen; SDXL native res 512, then NN-shrink to 64x64, never bilinear)"
+  },
+  "prompt_templates": {
+    "positive_base": "pixel art, littlebuddy, 32x32 chibi creature, white background, masterpiece, highly detailed, sharp pixels, no smoothing, {pose}",
+    "negative": "blurry, smoothed, anti-aliased, gradients, muted, dull, hazy, muddy colors, deformed, noise, borders, frame, watermark, text, signature, multiple characters, extra limbs, human, realistic, photo, 3d, grass, ground, outdoor, landscape, scenery, green shadow, colored shadow, fantasy, wings, halo, tail, animal ears, cat ears"
+  },
+  "pose_templates": {
+    "idle": "standing, idle pose, both feet planted, neutral expression",
+    "happy": "happy expression, small smile, slight bounce",
+    "sad": "sad expression, head tilted down",
+    "angry": "angry expression, slight stomp",
+    "sleepy": "sleepy expression, eyes half closed, slight sway",
+    "thirsty": "thirsty expression, looking up, tongue slightly out",
+    "hungry": "hungry expression, looking at viewer, eager",
+    "playful": "playful expression, one paw up, wagging",
+    "walking": "walking forward, one foot in front of the other, mid-step",
+    "sitting": "sitting pose, weight on haunches"
+  }
+}
