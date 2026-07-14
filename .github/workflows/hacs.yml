@@ -10,9 +10,9 @@ jobs:
       - name: HACS Action
         uses: hacs/action@main
         with:
-          # v0.9.5+: HACS-Integration-Category for native HA Updates panel.
-          # The bundle lives at custom_components/little_buddy_card/frontend/
-          # and is served by HA at /local/little_buddy_card/. The user adds
-          # this as a Lovelace resource manually (HACS-Integration does
-          # NOT auto-register Lovelace resources like HACS-Plugin does).
-          category: 'integration'
+          # v0.9.8+: back to HACS-Plugin (Dashboard) category.
+          # For a pure Lovelace frontend card this is the correct category:
+          # HACS downloads little-buddy-card.js to /hacsfiles/little-buddy-card/
+          # and AUTO-registers the Lovelace resource via update_dashboard_resources().
+          # No custom_components/, no manifest.json, no __init__.py needed.
+          category: 'plugin'
