@@ -116,7 +116,7 @@ function registerCustomCard(params: {
 registerCustomCard({
   type: 'little-buddy-card',
   name: 'Little Buddy Card',
-  description: 'A gamified Lovelace card with growable pixel-art pets and trees.',
+  description: 'A gamified Lovelace card (little buddy card, lbc) with growable pixel-art pets and trees.',
   documentationURL:
     'https://github.com/icem0/little-buddy-card/blob/main/README.md',
 });

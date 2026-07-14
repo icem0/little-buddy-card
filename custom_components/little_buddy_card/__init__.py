@@ -1,29 +1,45 @@
 """The Little Buddy Card integration.
 
-This integration is a Lovelace card (a frontend plugin) distributed as
-an HA custom component so HACS can place the JS bundle under
-`custom_components/little_buddy_card/frontend/` for HA to serve at
-`/local/little_buddy_card/`. Home Assistant's built-in HTTP server
-auto-serves any file under `<config>/custom_components/<domain>/www/`
-at `/local/<domain>/...`. The `frontend/` subdir is referenced the
-same way by the `__init__.py` resource registration below for clarity
-and so HACS's integration validator is happy.
+This integration is a Lovelace card (frontend plugin) distributed as
+an HA custom component. The bundle lives under
+`custom_components/little_buddy_card/frontend/`.
 
-The card is registered client-side by the bundle via
-`window.customCards.push({ type, name, ... })` — see
-`frontend/little-buddy-card.js`. This `__init__.py` only ensures
-HA's frontend module loader is ready; the actual card-element
-auto-discovery is done by the bundle itself.
+On setup, we:
+  1. Register `frontend/` as a static path at `/local/little_buddy_card/`
+     so Home Assistant's web server can serve the bundle.
+  2. Call `add_extra_module_url()` so Lovelace picks up the bundle as a
+     JavaScript module resource automatically — the user does NOT need to
+     add it manually under "Settings → Dashboards → Resources".
+
+This is the canonical "Lovelace card as a HACS-Integration" pattern
+(see hacs.xyz/docs/publish/integration). Without these two lines, the
+bundle would be installed on disk but never loaded by the browser,
+and `window.customCards.push(...)` would never run.
 """
 from __future__ import annotations
 
+import os
+
+from homeassistant.components.frontend import add_extra_module_url
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.core import HomeAssistant
 
 
 DOMAIN = "little_buddy_card"
+MODULE_URL = "/local/little_buddy_card/little-buddy-card.js"
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
-    """Set up the Little Buddy Card integration (no-op frontend bridge)."""
+    """Set up the Little Buddy Card integration and register the frontend."""
+    frontend_dir = os.path.join(os.path.dirname(__file__), "frontend")
+
+    # 1. Serve frontend/ at /local/little_buddy_card/
+    await hass.http.async_register_static_paths(
+        [StaticPathConfig("/local/little_buddy_card", frontend_dir, cache_headers=False)]
+    )
+
+    # 2. Register the bundle as a Lovelace JavaScript module
+    add_extra_module_url(hass, MODULE_URL)
+
     hass.data.setdefault(DOMAIN, {})
     return True
