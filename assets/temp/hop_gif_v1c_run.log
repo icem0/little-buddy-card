@@ -1,0 +1,13 @@
+=== katharina_hop_gif_v1 (Wan2.2 I2V: hüpft vor Freude) ===
+Wan: Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors
+T5: umt5_xxl_fp8_e4m3fn_scaled.safetensors
+VAE: Wan\wan_2.1_vae.safetensors
+Master: /root/little-buddy-card/assets/characters/katharina/master/katharina_master.png
+512x512, 16 frames, 12 fps
+
+Master hochladen...
+  ✓ katharina_master.png
+
+Seed: 3543, Steps: 20, CFG: 6.0, Frames: 16
+Submit...
+  ✗ Execution error: {'prompt_id': 'd2766b15-8232-423a-8c73-269a840903ba', 'node_id': '2', 'node_type': 'LoadWanVideoT5TextEncoder', 'executed': [], 'exception_message': 'Invalid T5 text encoder model, fp8 scaled is not supported by this node\n', 'exception_type': 'ValueError', 'traceback': ['  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 543, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 342, in get_output_data\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 316, in _async_map_node_over_list\n    await process_inputs(input_dict, i)\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 304, in process_inputs\n    result = f(**inputs)\n             ^^^^^^^^^^^\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\custom_nodes\\ComfyUI-WanVideoWrapper\\nodes_model_loading.py", line 2004, in loadmodel\n    raise ValueError("Invalid T5 text encoder model, fp8 scaled is not supported by this node")\n'], 'current_inputs': {'model_name': ['umt5_xxl_fp8_e4m3fn_scaled.safetensors'], 'precision': ['fp16']}, 'current_outputs': ['7', '2', '11', '3', '1', '4', '8', '9', '6', '5', '10'], 'timestamp': 1784009476805}

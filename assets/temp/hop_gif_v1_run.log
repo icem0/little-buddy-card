@@ -1,0 +1,13 @@
+=== katharina_hop_gif_v1 (Wan2.2 I2V: hüpft vor Freude) ===
+Wan: Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors
+T5: umT5_xxl
+VAE: Wan\wan_2.1_vae.safetensors
+Master: /root/little-buddy-card/assets/characters/katharina/master/katharina_master.png
+512x512, 16 frames, 12 fps
+
+Master hochladen...
+  ✓ katharina_master.png
+
+Seed: 9999, Steps: 20, CFG: 6.0, Frames: 16
+Submit...
+  ✗ Execution error: {'prompt_id': '4e42e66c-bfbf-44d3-949a-adcc377d2de5', 'node_id': '3', 'node_type': 'WanVideoVAELoader', 'executed': [], 'exception_message': "WanVideoVAELoader.loadmodel() missing 1 required positional argument: 'precision'\n", 'exception_type': 'TypeError', 'traceback': ['  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 543, in execute\n    output_data, output_ui, has_subgraph, has_pending_tasks = await get_output_data(prompt_id, unique_id, obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 342, in get_output_data\n    return_values = await _async_map_node_over_list(prompt_id, unique_id, obj, input_data_all, obj.FUNCTION, allow_interrupt=True, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb, v3_data=v3_data)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 316, in _async_map_node_over_list\n    await process_inputs(input_dict, i)\n', '  File "F:\\AI\\SwarmUI\\dlbackend\\comfy\\ComfyUI\\execution.py", line 304, in process_inputs\n    result = f(**inputs)\n             ^^^^^^^^^^^\n'], 'current_inputs': {'model_name': ['Wan\\wan_2.1_vae.safetensors']}, 'current_outputs': ['7', '2', '11', '3', '1', '4', '8', '9', '6', '5', '10'], 'timestamp': 1784009422160}
