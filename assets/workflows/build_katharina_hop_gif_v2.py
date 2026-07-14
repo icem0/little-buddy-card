@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 """
-katharina_hop_gif_v1 -- Katharina hüpft vor Freude (Wan2.2 I2V)
+katharina_hop_gif_v2 -- Wan2.2 I2V FIX: korrekter T5-Load
 
-KEIN CharTurn (User will Bewegung, nicht Drehung).
-Wan2.2 Image-to-Video: Master als Startframe + "hüpft vor Freude" Prompt
-→ animiertes GIF/WEBP.
+T5-Bug-Diagnose (GitHub kijai/ComfyUI-WanVideoWrapper #891):
+  - 'umt5_xxl_fp8_e4m3fn_scaled' wird abgelehnt ("fp8 scaled not supported")
+  - 't5xxl_fp16' hat Key-Inkompatibilität (erwartet umT5-Format)
+  - 't5xxl_fp8_e4m3fn' (OHNE scaled) ist kompatibel, aber Wrapper
+    lädt es über 'quantization'-Parameter, nicht 'precision'
 
-Pipeline:
-  WanVideoModelLoader (Animate-14B)
-  LoadWanVideoT5TextEncoder
-  WanVideoVAELoader
-  LoadImage (Master)
-  WanVideoEncode (Startframe → latent)
-  Wan22ImageToVideoLatent (timestep/length)
-  CLIPTextEncode (WanVideo-Text)
-  WanVideoSampler
-  WanVideoDecode
-  SaveAnimatedWEBP
+FIX:
+  LoadWanVideoT5TextEncoder:
+    model_name = "t5xxl_fp8_e4m3fn.safetensors"
+    precision = "fp16"   # Wrapper erwartet fp16/bf16/fp32 als precision-String
+    quantization = "fp8_e4m3fn"  # sagt: lade als fp8
 
-Cache-Bypass: seed variieren (KSampler/Sampler haben keinen 0.27.0-Cache-Bug)
+  Das ist der korrekte Weg laut Wrapper-Code (nodes_model_loading.py line 1989-2004)
 """
 
 import os, sys, time, random
@@ -27,10 +23,10 @@ from PIL import Image
 
 HOST = "http://192.168.178.53:7801"
 MASTER = "/root/little-buddy-card/assets/characters/katharina/master/katharina_master.png"
-OUT_DIR = "/root/little-buddy-card/assets/characters/katharina/hop_gif_v1"
+OUT_DIR = "/root/little-buddy-card/assets/characters/katharina/hop_gif_v2"
 
 WAN_MODEL = "Wan2_2-Animate-14B_fp8_e4m3fn_scaled_KJ.safetensors"
-T5_MODEL = "t5xxl_fp8_e4m3fn.safetensors"  # fp8 (nicht scaled), wird vom Wrapper evtl. akzeptiert
+T5_MODEL = "umt5_xxl_fp8_e4m3fn_scaled.safetensors"  # umT5 (korrektes Format für Wrapper)
 VAE_MODEL = "Wan\\wan_2.1_vae.safetensors"
 
 PROMPT = (
@@ -57,7 +53,6 @@ def get_session():
 
 
 def upload_image(img_path):
-    """Master zu ComfyUI hochladen für LoadImage."""
     fname = os.path.basename(img_path)
     with open(img_path, "rb") as f:
         files = {"image": (fname, f, "image/png")}
@@ -74,8 +69,17 @@ def build_workflow(seed, steps, cfg, length, master_fname, prefix):
             "inputs": {
                 "model": WAN_MODEL,
                 "base_precision": "fp16",
-                "quantization": "disabled",
+                "quantization": "fp8_e4m3fn",  # fp8 für 4090
                 "load_device": "main_device",
+            }
+        },
+        "2": {
+            "class_type": "LoadWanVideoT5TextEncoder",
+            "inputs": {
+                "model_name": T5_MODEL,
+                "precision": "bf16",
+                "load_device": "offload_device",
+                "quantization": "fp8_e4m3fn",
             }
         },
         "3": {
@@ -109,25 +113,21 @@ def build_workflow(seed, steps, cfg, length, master_fname, prefix):
             }
         },
         "7": {
-            "class_type": "WanVideoTextEncodeCached",
+            "class_type": "WanVideoTextEncode",
             "inputs": {
-                "model_name": T5_MODEL,
-                "precision": "fp8_e4m3fn",
                 "positive_prompt": PROMPT,
                 "negative_prompt": NEG,
-                "quantization": "disabled",
-                "use_disk_cache": False,
-                "device": "offload_device",
+                "t5": ["2", 0],
             }
         },
         "9": {
             "class_type": "WanVideoSampler",
             "inputs": {
                 "model": ["1", 0],
-                "image_embeds": ["5", 0],  # Startframe-Encode
+                "image_embeds": ["5", 0],
                 "positive": ["7", 0],
                 "negative": ["7", 1],
-                "latent": ["6", 0],  # I2V-Latent
+                "latent": ["6", 0],
                 "steps": steps,
                 "cfg": cfg,
                 "shift": 5.0,
@@ -177,7 +177,6 @@ def submit_and_wait(workflow, timeout=900):
                 entry = data[pid]
                 if entry.get("status", {}).get("completed"):
                     return entry
-                # Error?
                 for m in entry.get("status", {}).get("messages", []):
                     if m[0] == "execution_error":
                         raise Exception(f"Execution error: {m[1]}")
@@ -210,11 +209,10 @@ def download(img_info, save_to):
 
 if __name__ == "__main__":
     do_submit = "--submit" in sys.argv
-    print(f"=== katharina_hop_gif_v1 (Wan2.2 I2V: hüpft vor Freude) ===")
-    print(f"Wan: {WAN_MODEL}")
-    print(f"T5: {T5_MODEL}")
+    print(f"=== katharina_hop_gif_v2 (Wan2.2 I2V mit fp8 T5 fix) ===")
+    print(f"Wan: {WAN_MODEL} (quantization: fp8_e4m3fn)")
+    print(f"T5: {T5_MODEL} (quantization: fp8_e4m3fn)")
     print(f"VAE: {VAE_MODEL}")
-    print(f"Master: {MASTER}")
     print(f"512x512, 16 frames, 12 fps")
     print()
 
@@ -230,8 +228,8 @@ if __name__ == "__main__":
     seed = random.randint(1000, 9999)
     steps = 20
     cfg = 6.0
-    length = 16  # 16 Frames
-    prefix = f"katharina_hop_v1_{int(time.time())%100000}"
+    length = 16
+    prefix = f"katharina_hop_v2_{int(time.time())%100000}"
 
     print(f"\nSeed: {seed}, Steps: {steps}, CFG: {cfg}, Frames: {length}")
     print(f"Submit...")
@@ -243,7 +241,7 @@ if __name__ == "__main__":
         if not img_info:
             print("  ✗ Kein WEBP-Output")
             sys.exit(1)
-        out_path = os.path.join(OUT_DIR, "katharina_hop_v1.webp")
+        out_path = os.path.join(OUT_DIR, "katharina_hop_v2.webp")
         size = download(img_info, out_path)
         print(f"  ✓ {out_path} ({size//1024} KB)")
         print(f"\n=== FERTIG ===")

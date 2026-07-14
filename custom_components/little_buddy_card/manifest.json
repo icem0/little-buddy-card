@@ -1,0 +1,12 @@
+{
+  "domain": "little_buddy_card",
+  "name": "Little Buddy Card",
+  "version": "0.9.5",
+  "documentation": "https://github.com/icem0/little-buddy-card",
+  "issue_tracker": "https://github.com/icem0/little-buddy-card/issues",
+  "codeowners": ["@icem0"],
+  "config_flow": false,
+  "dependencies": [],
+  "iot_class": "local_push",
+  "integration_type": "lovelace"
+}
